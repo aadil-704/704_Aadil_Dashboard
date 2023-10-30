@@ -93,6 +93,8 @@ with tab2:
   df
   a=df.STATE.unique()
   a
+  b=df.CONSTITUENCY.unique()
+  b
   option = st.selectbox(
     'How would you like to be contacted?',
     ('Email', 'Home phone', 'Mobile phone'))
