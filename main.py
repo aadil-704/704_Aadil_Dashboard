@@ -87,7 +87,9 @@ with tab1:
   ax
 
 with tab2:
-  option = st.selectbox('Email', 'Home phone', 'Mobile phone')
+  option = st.selectbox(
+    'How would you like to be contacted?',
+    ('Email', 'Home phone', 'Mobile phone'))
 
 
 
