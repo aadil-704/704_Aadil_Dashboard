@@ -107,7 +107,7 @@ with tab2:
       'How would you ',
       (b))
   
-  # df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
-  # df2
+  df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
+  df2
 
 
