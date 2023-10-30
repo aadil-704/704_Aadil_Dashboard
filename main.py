@@ -91,7 +91,8 @@ with tab2:
   df=pd.read_csv("data.csv")
   df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "Genral_votes","POSTAL\nVOTES":"Postal_votes","TOTAL\nVOTES":"Total_votes"})
   df
-
+  a=df.STATE.unique()
+  a
   option = st.selectbox(
     'How would you like to be contacted?',
     ('Email', 'Home phone', 'Mobile phone'))
