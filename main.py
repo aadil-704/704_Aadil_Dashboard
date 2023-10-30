@@ -100,10 +100,10 @@ with tab2:
     option = st.selectbox(
       'How would you like to be contacted?',
       (a))
-  df1=df[(df['STATE'] == option) 
-  df1
+  # df1=df[(df['STATE'] == option) 
+  # df1
   
-  df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
-  df2
+  # df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
+  # df2
 
 
