@@ -5,9 +5,10 @@ import numpy as np
 import plotly.express as px
 import streamlit as st
 
+st.header("General Elections In India 2019")
 tab1, tab2 = st.tabs(["Graph", "Analysis"])
 with tab1:
-  st.header("General Elections In India 2019")
+  
   df=pd.read_csv("data.csv")
   
   
