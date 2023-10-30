@@ -94,13 +94,18 @@ with tab2:
   a=df.STATE.unique()
   
   b=df.CONSTITUENCY.unique()
+  col1,col2,col3=st.columns(3)
   
-  option = st.selectbox(
-    'How would you like to be contacted?',
-    (a))
-  option2 = st.selectbox(
-    'How would you ',
-    (b))
+  with col1:
+    
+    option = st.selectbox(
+      'How would you like to be contacted?',
+      (a))
+  with col2: 
+    option2 = st.selectbox(
+      'How would you ',
+      (b))
+  
    
    
 
