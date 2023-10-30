@@ -13,7 +13,7 @@ with tab1:
   
   
   df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "Genral_votes","POSTAL\nVOTES":"Postal_votes","TOTAL\nVOTES":"Total_votes"})
-  df
+  # df
   
   
   
