@@ -93,7 +93,7 @@ with tab2:
   # df
   a=df.STATE.unique()
   
-  b=df.CONSTITUENCY.unique()
+  
   col1,col2,col3=st.columns(3)
   
   with col1:
@@ -101,12 +101,14 @@ with tab2:
     option = st.selectbox(
       'How would you like to be contacted?',
       (a))
-  with col2: 
+    df1=df[(df['STATE'] == option) 
+  with col2:
+    b=df1.CONSTITUENCY.unique()
     option2 = st.selectbox(
       'How would you ',
       (b))
   
-  df1=df[(df['STATE'] == option) & (df['CONSTITUENCY'] == option2)]
-  df1
+  df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
+  df2
 
 
