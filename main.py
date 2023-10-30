@@ -98,7 +98,7 @@ with tab2:
   option = st.selectbox(
     'How would you like to be contacted?',
     ('Email', 'Home phone', 'Mobile phone'))
-  option = st.selectbox(
+  option2 = st.selectbox(
     'How would you like to be contacted?',
     ('Email', 'Home phone', 'Mobile phone'))
    
