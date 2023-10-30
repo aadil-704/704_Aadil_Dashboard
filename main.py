@@ -106,7 +106,7 @@ with tab2:
       'How would you ',
       (b))
   
-   df1=df[df[df.["STATE"]== option]]
+   df1=df[df.["STATE"]== option]
    df1
 
 
