@@ -109,5 +109,6 @@ with tab2:
   
   df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
   df2
-
+  df3=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2) & (df1['WINNER'] == 1)]
+  df3
 
