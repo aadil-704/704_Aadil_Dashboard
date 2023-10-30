@@ -98,13 +98,13 @@ with tab2:
   
   with col1:
     option = st.selectbox(
-      'How would you like to be contacted?',
+      'Select State 👇',
       (a))
   df1=df[(df['STATE'] == option)]
   with col2:
     b=df1.CONSTITUENCY.unique()
     option2 = st.selectbox(
-      'How would you ',
+      'Select Constituency 👇',
       (b))
   
   df2=df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
