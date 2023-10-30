@@ -13,7 +13,7 @@ with tab1:
   
   
   df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "Genral_votes","POSTAL\nVOTES":"Postal_votes","TOTAL\nVOTES":"Total_votes"})
-  # df
+  df
   
   
   
@@ -87,10 +87,14 @@ with tab1:
   ax
 
 with tab2:
-  option = st.selectbox(
+ 
+  df=pd.read_csv("data.csv")
+  df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "Genral_votes","POSTAL\nVOTES":"Postal_votes","TOTAL\nVOTES":"Total_votes"})
+  df
+
+   option = st.selectbox(
     'How would you like to be contacted?',
     ('Email', 'Home phone', 'Mobile phone'))
-
-
+   
 
 
