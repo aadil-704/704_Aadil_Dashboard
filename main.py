@@ -90,7 +90,7 @@ with tab2:
  
   df=pd.read_csv("data.csv")
   df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "Genral_votes","POSTAL\nVOTES":"Postal_votes","TOTAL\nVOTES":"Total_votes"})
-  df
+  # df
   a=df.STATE.unique()
   
   b=df.CONSTITUENCY.unique()
@@ -106,7 +106,7 @@ with tab2:
       'How would you ',
       (b))
   
-   
-   
+   df1=df[df[df.["STATE"]== option]]
+   df1
 
 
