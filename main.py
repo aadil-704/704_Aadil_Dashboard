@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import re
 import plotly.express as px
 import streamlit as st
 
@@ -22,21 +21,27 @@ if tab_selector == "Graph":
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
-    # Clean up 'ASSETS' column and extract desired format
+    # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
-    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+(?:\s+(?:Crore\+)))', expand=False)  # Extract desired format
+    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)  # Convert to float
+
+    # Fill missing values with 0
+    df['ASSETS'] = df['ASSETS'].fillna(0)
+
+    # Convert to integer
+    df['ASSETS'] = df['ASSETS'].astype(int)
 
     # Remove missing or invalid values from 'ASSETS' column
-    df = df.dropna(subset=['ASSETS'])
+    df = df[df['ASSETS'].notna()]
 
-    # Group by asset formats and count their occurrences
-    asset_counts = df['ASSETS'].value_counts().reset_index()
-    asset_counts.columns = ['ASSETS', 'COUNT']
-    
-    # Sort by count of assets in descending order and select top 10
-    top_10_assets = asset_counts.head(10)
+    # Group by individual's name and find the maximum assets for each individual
+    individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
+    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
-    fig = px.bar(top_10_assets, x='ASSETS', y='COUNT', color='ASSETS', title='Top 10 Asset Formats')
+    # Sort by count of assets in descending order
+    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
+
+    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
