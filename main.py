@@ -66,18 +66,11 @@ with tab2:
 
     a = df.STATE.unique()
 
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        option = st.selectbox(
-            'Select State ',
-            (a))
+    option = st.selectbox('Select State ', a)
     df1 = df[(df['STATE'] == option)]
-    with col2:
-        b = df1.CONSTITUENCY.unique()
-        option2 = st.selectbox(
-            'Select Constituency ',
-            (b))
+
+    b = df1.CONSTITUENCY.unique()
+    option2 = st.selectbox('Select Constituency ', b)
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
