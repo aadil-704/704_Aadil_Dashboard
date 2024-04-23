@@ -41,12 +41,7 @@ if tab_selector == "Graph":
     fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
     st.plotly_chart(fig)
 
-    df['EDUCATION'] = df['EDUCATION'].replace('Post Graduate\n', 'Post Graduate')
-    df['EDUCATION'] = df['EDUCATION'].replace('Not Available', 'Others')
-    education = df['EDUCATION'].value_counts().reset_index()
-    education.columns = ['EDUCATION', 'COUNT']
-    fig = px.bar(education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Education Level of the Candidates')
-    st.plotly_chart(fig)
+    
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
@@ -88,11 +83,7 @@ if tab_selector == "Graph":
 
     fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
-
-    category = df['CATEGORY'].value_counts().reset_index()
-    category.columns = ['CATEGORY', 'COUNT']
-    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Contest from Various Categories')
-    st.plotly_chart(fig)
+    
 
     df = df[df['WINNER'] == 1]
     category = df['CATEGORY'].value_counts().reset_index()
