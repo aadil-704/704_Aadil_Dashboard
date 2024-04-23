@@ -53,12 +53,12 @@ if tab_selector == "Graph":
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
     winner_education.columns = ['EDUCATION', 'COUNT']
 
-     # Plot the bar chart for winning candidates' educational degrees
-try:
-    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', hover_data=['EDUCATION', 'COUNT'], title='Winning Candidates Educational Degree')
-    st.plotly_chart(fig)
-except ValueError as e:
-    st.error(f"Error: {e}")
+    # Plot the bar chart for winning candidates' educational degrees
+    try:
+        fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', hover_data=['EDUCATION', 'COUNT'], title='Winning Candidates Educational Degree')
+        st.plotly_chart(fig)
+    except ValueError as e:
+        st.error(f"Error: {e}")
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
