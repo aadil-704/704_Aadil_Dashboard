@@ -52,15 +52,8 @@ if tab_selector == "Graph":
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
     winner_education.columns = ['EDUCATION', 'COUNT']
 
-    # Print out the contents of the winner_education DataFrame
-    print(winner_education)
-
-    # Plot the bar chart for winning candidates' educational degrees without specifying color
-    fig = px.bar(winner_education, 
-                 x='EDUCATION', 
-                 y='COUNT', 
-                 title='Winning Candidates Educational Degree',
-                 hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY': True, 'STATE': True, 'CONSTITUENCY': True})
+    # Plot the bar chart for winning candidates' educational degrees
+    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
     st.plotly_chart(fig)
 
     # Convert 'Criminal' column to numeric
