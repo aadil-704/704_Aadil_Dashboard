@@ -15,23 +15,15 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
 
-    # Main content based on tab selection
-if tab_selector == "Graph":
-    st.subheader("Graph")
+     # Aggregating data to get the total number of seats won by each party in each state
+    seats_won_by_party = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON').groupby('PARTY').agg({'SEATS_WON': 'sum'}).reset_index()
 
-    # Aggregating data to get the number of seats won by each party in each state
-    seats_won_by_party = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
-
-    # Plotting the choropleth map
-    fig = px.choropleth(seats_won_by_party, 
-                        locations='STATE', 
-                        locationmode='country names',
-                        color='SEATS_WON',
-                        hover_name='PARTY',
-                        hover_data=['SEATS_WON'],
-                        scope='asia',  # Set map scope to Asia (India)
-                        title='Number of Seats Won by Party in Each State')
-    fig.update_geos(projection_type="mercator")  # Set map projection to Mercator
+    # Plotting the bar chart
+    fig = px.bar(seats_won_by_party, 
+                 x='PARTY', 
+                 y='SEATS_WON', 
+                 color='PARTY', 
+                 title='Total Number of Seats Won by Party in Each State')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
