@@ -76,7 +76,7 @@ with tab1:
   
   category = df['CATEGORY'].value_counts().reset_index()
   category.columns= ['CATEGORY','COUNT']
-  ax = px.bar(category,x = 'CATEGORY', y = 'COUNT', color = 'CATEGORY')
+  ax = px.bar(category,x = 'CATEGORY', y = 'COUNT', color = 'CATEGORY', title='Contest from Various Categaroies')
   ax
   
   
