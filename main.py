@@ -34,6 +34,9 @@ if tab_selector == "Graph":
     # Convert 'ASSETS' column to integer for count
     individual_assets['ASSETS'] = individual_assets['ASSETS'].astype(int)
 
+    # Sort by count of assets in descending order
+    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
+
     fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
 
