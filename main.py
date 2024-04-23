@@ -21,9 +21,9 @@ if tab_selector == "Graph":
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
-    # Clean up 'ASSETS' column and convert to float
+    # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
-    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)
+    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(int)  # Convert to integer
 
     # Remove missing or invalid values from 'ASSETS' column
     df = df.dropna(subset=['ASSETS'])
@@ -32,9 +32,6 @@ if tab_selector == "Graph":
     individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
     
-    # Convert 'ASSETS' column to integer for count
-    individual_assets['ASSETS'] = individual_assets['ASSETS'].astype(int)
-
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
