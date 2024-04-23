@@ -15,6 +15,8 @@ if tab_selector == "Graph":
     df['Criminal'] = df['Criminal'].fillna(0)
 
     party_criminal_cases = df.groupby('PARTY')['Criminal'].sum().reset_index()
+    # Drop NaN values before calculating maximum criminal cases
+    party_criminal_cases = party_criminal_cases.dropna()
     party_most_criminal = party_criminal_cases.loc[party_criminal_cases['Criminal'].idxmax()]
 
     st.write(f"The party with the most criminal cases is {party_most_criminal['PARTY']} with {party_most_criminal['Criminal']} cases.")
