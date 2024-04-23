@@ -18,7 +18,7 @@ if tab_selector == "Graph":
     party_criminal_cases = df.groupby('PARTY')['Criminal'].sum().reset_index()
     party_criminal_cases = party_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='Criminal', title='Top 10 Parties with the Most Criminal Cases')
+    fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
     # Clean up 'ASSETS' column and convert to integer
