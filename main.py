@@ -14,8 +14,7 @@ if tab_selector == "Graph":
     fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
     st.plotly_chart(fig)
 
-
-     # Aggregating data to get the total number of seats won by each party in each state
+    # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON').groupby('PARTY').agg({'SEATS_WON': 'sum'}).reset_index()
 
     # Plotting the bar chart
