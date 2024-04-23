@@ -21,21 +21,20 @@ if tab_selector == "Graph":
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
-   # Check if 'Assets' column exists in the DataFrame
-if 'Assets' in df.columns:
-    # Convert 'Assets' column to numeric
-    df['Assets'] = df['Assets'].str.replace('Rs ', '').str.replace(',', '').astype(float)
+    # Check if 'Assets' column exists in the DataFrame
+    if 'Assets' in df.columns:
+        # Convert 'Assets' column to numeric
+        df['Assets'] = df['Assets'].str.replace('Rs ', '').str.replace(',', '').astype(float)
 
-    # Perform further operations with the 'Assets' column
-    party_richest_person = df.groupby('PARTY')['Assets'].max().reset_index()
-    party_richest_person = party_richest_person.sort_values(by='Assets', ascending=False).head(10)
+        # Perform further operations with the 'Assets' column
+        party_richest_person = df.groupby('PARTY')['Assets'].max().reset_index()
+        party_richest_person = party_richest_person.sort_values(by='Assets', ascending=False).head(10)
 
-    fig = px.bar(party_richest_person, x='PARTY', y='Assets', color='PARTY', title='Top 10 Parties with the Richest Person')
-    st.plotly_chart(fig)
-else:
-    st.write("The 'Assets' column does not exist in the dataset.")
+        fig = px.bar(party_richest_person, x='PARTY', y='Assets', color='PARTY', title='Top 10 Parties with the Richest Person')
+        st.plotly_chart(fig)
+    else:
+        st.write("The 'Assets' column does not exist in the dataset.")
 
-    
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
