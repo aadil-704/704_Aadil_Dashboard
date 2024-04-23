@@ -10,7 +10,44 @@ if tab_selector == "Graph":
     st.subheader("Graph")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
-    
+    num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
+    fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
+    st.plotly_chart(fig)
+
+    party = df['PARTY'].value_counts().reset_index().head(10)
+    party.columns = ['PARTY', 'COUNT']
+    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
+    st.plotly_chart(fig)
+
+    df_winners = df[df['WINNER'] == 1]
+    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
+    winner.columns = ['PARTY', 'COUNT']
+    fig = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
+    st.plotly_chart(fig)
+
+    young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
+    fig = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
+    st.plotly_chart(fig)
+
+    old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
+    fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
+    st.plotly_chart(fig)
+
+    df['EDUCATION'] = df['EDUCATION'].replace('Post Graduate\n', 'Post Graduate')
+    df['EDUCATION'] = df['EDUCATION'].replace('Not Available', 'Others')
+    education = df['EDUCATION'].value_counts().reset_index()
+    education.columns = ['EDUCATION', 'COUNT']
+    fig = px.bar(education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Education Level of the Candidates')
+    st.plotly_chart(fig)
+
+    df_winners = df[df['WINNER'] == 1]  # Filter winners
+    winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
+    winner_education.columns = ['EDUCATION', 'COUNT']
+
+    # Plot the bar chart for winning candidates' educational degrees
+    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
+    st.plotly_chart(fig)
+
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
     df['Criminal'] = df['Criminal'].fillna(0)
@@ -44,44 +81,6 @@ if tab_selector == "Graph":
     fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
 
-    party = df['PARTY'].value_counts().reset_index().head(10)
-    party.columns = ['PARTY', 'COUNT']
-    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
-    st.plotly_chart(fig)
-
-    df_winners = df[df['WINNER'] == 1]
-    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
-    winner.columns = ['PARTY', 'COUNT']
-    fig = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
-    st.plotly_chart(fig)
-
-    num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
-    fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
-    st.plotly_chart(fig)
-
-    young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
-    fig = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
-    st.plotly_chart(fig)
-
-    old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
-    fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
-    st.plotly_chart(fig)
-
-    df['EDUCATION'] = df['EDUCATION'].replace('Post Graduate\n', 'Post Graduate')
-    df['EDUCATION'] = df['EDUCATION'].replace('Not Available', 'Others')
-    education = df['EDUCATION'].value_counts().reset_index()
-    education.columns = ['EDUCATION', 'COUNT']
-    fig = px.bar(education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Education Level of the Candidates')
-    st.plotly_chart(fig)
-    
-    df_winners = df[df['WINNER'] == 1]  # Filter winners
-    winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
-    winner_education.columns = ['EDUCATION', 'COUNT']
-
-    # Plot the bar chart for winning candidates' educational degrees
-    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
-    st.plotly_chart(fig)
-
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
     fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Contest from Various Categories')
@@ -92,7 +91,6 @@ if tab_selector == "Graph":
     category.columns = ['CATEGORY', 'COUNT']
     fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
     st.plotly_chart(fig)
-
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
