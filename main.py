@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 import plotly.express as px
 import streamlit as st
 
@@ -21,27 +22,18 @@ if tab_selector == "Graph":
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
-    # Clean up 'ASSETS' column and convert to integer
+    # Clean up 'ASSETS' column and extract desired format
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
-    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)  # Convert to float
-
-    # Fill missing values with 0
-    df['ASSETS'] = df['ASSETS'].fillna(0)
-
-    # Convert to integer
-    df['ASSETS'] = df['ASSETS'].astype(int)
+    df['ASSETS'] = df['ASSETS'].str.extract(r'[\d.]+(?:\s+(Crore\+))', expand=False)  # Extract desired format
 
     # Remove missing or invalid values from 'ASSETS' column
-    df = df[df['ASSETS'].notna()]
+    df = df.dropna(subset=['ASSETS'])
 
-    # Group by individual's name and find the maximum assets for each individual
-    individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
-    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
+    # Group by individual's name and count the frequency of each asset format
+    individual_assets = df['ASSETS'].value_counts().reset_index().head(10)
+    individual_assets.columns = ['ASSETS', 'COUNT']
 
-    # Sort by count of assets in descending order
-    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
-
-    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
+    fig = px.bar(individual_assets, x='ASSETS', y='COUNT', color='ASSETS', title='Top 10 Asset Formats')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
