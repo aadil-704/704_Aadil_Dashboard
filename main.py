@@ -20,6 +20,16 @@ if tab_selector == "Graph":
 
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
+
+    # Convert 'Assets' column to numeric
+    df['Assets'] = df['Assets'].str.replace('Rs ', '').str.replace(',', '').astype(float)
+
+    party_richest_person = df.groupby('PARTY')['Assets'].max().reset_index()
+    party_richest_person = party_richest_person.sort_values(by='Assets', ascending=False).head(10)
+
+    fig = px.bar(party_richest_person, x='PARTY', y='Assets', color='PARTY', title='Top 10 Parties with the Richest Person')
+    st.plotly_chart(fig)
+    
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
