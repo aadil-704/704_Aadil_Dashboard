@@ -22,6 +22,7 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
     # Clean up 'ASSETS' column and convert to float
+    df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
     df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)
 
     # Remove missing or invalid values from 'ASSETS' column
