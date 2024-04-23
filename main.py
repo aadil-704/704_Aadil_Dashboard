@@ -10,6 +10,10 @@ if tab_selector == "Graph":
     st.subheader("Graph")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
+
+    # Handling missing values by replacing them with 0
+    df['Criminal'] = df['Criminal'].fillna(0)
+
     party_criminal_cases = df.groupby('PARTY')['Criminal'].sum().reset_index()
     party_most_criminal = party_criminal_cases.loc[party_criminal_cases['Criminal'].idxmax()]
 
