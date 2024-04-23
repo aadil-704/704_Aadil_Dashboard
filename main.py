@@ -18,7 +18,7 @@ if tab_selector == "Graph":
     party_criminal_cases = df.groupby('PARTY')['Criminal'].sum().reset_index()
     party_criminal_cases = party_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
+    fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='Criminal', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
     # Clean up 'ASSETS' column and convert to integer
@@ -79,7 +79,7 @@ if tab_selector == "Graph":
     winner_education.columns = ['EDUCATION', 'COUNT']
 
     # Plot the bar chart for winning candidates' educational degrees
-    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='PARTY', title='Winning Candidates Educational Degree')
+    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
     st.plotly_chart(fig)
 
     category = df['CATEGORY'].value_counts().reset_index()
