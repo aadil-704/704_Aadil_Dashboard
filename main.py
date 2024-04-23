@@ -73,9 +73,12 @@ if tab_selector == "Graph":
     education.columns = ['EDUCATION', 'COUNT']
     fig = px.bar(education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Education Level of the Candidates')
     st.plotly_chart(fig)
-
+    
+    df['EDUCATION'] = df['EDUCATION'].replace('Post Graduate\n', 'Post Graduate')
+    df['EDUCATION'] = df['EDUCATION'].replace('Not Available', 'Others')
+    education = df['EDUCATION'].value_counts().reset_index()
     winner = df[df['WINNER'] == 1]
-    fig = px.bar(winner, x='EDUCATION', y='WINNER', color='PARTY', title='Winning Candidates Educational Degree')
+    fig = px.bar(winner, x='EDUCATION', y='WINNER', color='EDUCATION', title='Winning Candidates Educational Degree')
     st.plotly_chart(fig)
 
     category = df['CATEGORY'].value_counts().reset_index()
