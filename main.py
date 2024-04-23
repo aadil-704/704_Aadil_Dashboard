@@ -30,6 +30,9 @@ if tab_selector == "Graph":
     # Group by individual's name and find the maximum assets for each individual
     individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
+    
+    # Convert 'ASSETS' column to integer for count
+    individual_assets['ASSETS'] = individual_assets['ASSETS'].astype(int)
 
     fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
