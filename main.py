@@ -15,7 +15,13 @@ if tab_selector == "Graph":
     fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
     st.plotly_chart(fig)
 
-   
+    # Aggregating data to get the total number of seats won by each party in each state
+    seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
+
+    # Plotting the bar chart for each state
+    fig = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State')
+    st.plotly_chart(fig)
+
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
@@ -25,13 +31,6 @@ if tab_selector == "Graph":
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
     winner.columns = ['PARTY', 'COUNT']
     fig = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
-    st.plotly_chart(fig)
-
-     # Aggregating data to get the total number of seats won by each party in each state
-    seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
-
-    # Plotting the bar chart for each state
-    fig = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State')
     st.plotly_chart(fig)
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
@@ -54,11 +53,8 @@ if tab_selector == "Graph":
     winner_education.columns = ['EDUCATION', 'COUNT']
 
     # Plot the bar chart for winning candidates' educational degrees
-    try:
-        fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', hover_data=['EDUCATION', 'COUNT'], title='Winning Candidates Educational Degree')
-        st.plotly_chart(fig)
-    except ValueError as e:
-        st.error(f"Error: {e}")
+    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
+    st.plotly_chart(fig)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
