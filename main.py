@@ -78,7 +78,6 @@ if tab_selector == "Graph":
     fig = px.bar(winner, x='EDUCATION', y='WINNER', color='PARTY', title='Winning Candidates Educational Degree')
     st.plotly_chart(fig)
 
-
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
     fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Contest from Various Categories')
