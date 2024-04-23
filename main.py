@@ -26,11 +26,11 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
-    fig = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY'], title='Youngest Winners')
+    fig = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
     st.plotly_chart(fig)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
-    fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY'], title='Oldest Winners and their Details:')
+    fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
     st.plotly_chart(fig)
 
     df['EDUCATION'] = df['EDUCATION'].replace('Post Graduate\n', 'Post Graduate')
@@ -55,7 +55,7 @@ if tab_selector == "Graph":
     individual_criminal_cases = df.groupby('NAME')['Criminal'].sum().reset_index()
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    fig = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='PARTY', title='Top 10 Individuals with the Most Criminal Cases')
+    fig = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases')
     st.plotly_chart(fig)
 
     # Clean up 'ASSETS' column and convert to integer
