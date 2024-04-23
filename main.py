@@ -21,15 +21,38 @@ if tab_selector == "Graph":
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
-    party_seats_contest = df['PARTY'].value_counts().reset_index().head(10)
-    party_seats_contest.columns = ['PARTY', 'COUNT']
-    fig = px.bar(party_seats_contest, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
+    # Clean up 'ASSETS' column and convert to integer
+    df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
+    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)  # Convert to float
+
+    # Fill missing values with 0
+    df['ASSETS'] = df['ASSETS'].fillna(0)
+
+    # Convert to integer
+    df['ASSETS'] = df['ASSETS'].astype(int)
+
+    # Remove missing or invalid values from 'ASSETS' column
+    df = df[df['ASSETS'].notna()]
+
+    # Group by individual's name and find the maximum assets, party, state, and constituency for each individual
+    individual_assets = df.groupby('NAME').agg({'ASSETS': 'max', 'PARTY': 'first', 'STATE': 'first', 'CONSTITUENCY': 'first'}).reset_index()
+    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
+
+    # Sort by count of assets in descending order
+    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
+
+    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
+    st.plotly_chart(fig)
+
+    party = df['PARTY'].value_counts().reset_index().head(10)
+    party.columns = ['PARTY', 'COUNT']
+    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
     st.plotly_chart(fig)
 
     df_winners = df[df['WINNER'] == 1]
-    party_seats_winning = df_winners['PARTY'].value_counts().reset_index().head(10)
-    party_seats_winning.columns = ['PARTY', 'COUNT']
-    fig = px.bar(party_seats_winning, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
+    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
+    winner.columns = ['PARTY', 'COUNT']
+    fig = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
     st.plotly_chart(fig)
 
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
@@ -56,13 +79,20 @@ if tab_selector == "Graph":
     winner_education.columns = ['EDUCATION', 'COUNT']
 
     # Plot the bar chart for winning candidates' educational degrees
-    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
+    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='PARTY', title='Winning Candidates Educational Degree')
     st.plotly_chart(fig)
 
-    individual_assets = df.groupby('NAME').agg({'ASSETS': 'max', 'PARTY': 'first', 'STATE': 'first', 'CONSTITUENCY': 'first'}).reset_index()
-    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
-    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
+    category = df['CATEGORY'].value_counts().reset_index()
+    category.columns = ['CATEGORY', 'COUNT']
+    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Contest from Various Categories')
     st.plotly_chart(fig)
+
+    df = df[df['WINNER'] == 1]
+    category = df['CATEGORY'].value_counts().reset_index()
+    category.columns = ['CATEGORY', 'COUNT']
+    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
+    st.plotly_chart(fig)
+
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
