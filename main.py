@@ -34,8 +34,8 @@ if tab_selector == "Graph":
     # Remove missing or invalid values from 'ASSETS' column
     df = df[df['ASSETS'].notna()]
 
-    # Group by individual's name and find the maximum assets for each individual
-    individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
+    # Group by individual's name, state, and constituency and find the maximum assets for each individual
+    individual_assets = df.groupby(['NAME', 'STATE', 'CONSTITUENCY'])['ASSETS'].max().reset_index()
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
     # Sort by count of assets in descending order
