@@ -24,16 +24,19 @@ if tab_selector == "Graph":
 
     # Clean up 'ASSETS' column and extract desired format
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
-    df['ASSETS'] = df['ASSETS'].str.extract(r'[\d.]+(?:\s+(Crore\+))', expand=False)  # Extract desired format
+    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+(?:\s+(?:Crore\+)))', expand=False)  # Extract desired format
 
     # Remove missing or invalid values from 'ASSETS' column
     df = df.dropna(subset=['ASSETS'])
 
-    # Group by individual's name and count the frequency of each asset format
-    individual_assets = df['ASSETS'].value_counts().reset_index().head(10)
-    individual_assets.columns = ['ASSETS', 'COUNT']
+    # Group by asset formats and count their occurrences
+    asset_counts = df['ASSETS'].value_counts().reset_index()
+    asset_counts.columns = ['ASSETS', 'COUNT']
+    
+    # Sort by count of assets in descending order and select top 10
+    top_10_assets = asset_counts.head(10)
 
-    fig = px.bar(individual_assets, x='ASSETS', y='COUNT', color='ASSETS', title='Top 10 Asset Formats')
+    fig = px.bar(top_10_assets, x='ASSETS', y='COUNT', color='ASSETS', title='Top 10 Asset Formats')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
