@@ -34,7 +34,7 @@ if tab_selector == "Graph":
     # Remove missing or invalid values from 'ASSETS' column
     df = df[df['ASSETS'].notna()]
 
-    # Group by individual's name, party, constituency, and state and find the maximum assets for each individual
+    # Group by individual's name and find the maximum assets for each individual
     individual_assets = df.groupby(['NAME', 'PARTY', 'CONSTITUENCY', 'STATE'])['ASSETS'].max().reset_index()
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
@@ -43,6 +43,7 @@ if tab_selector == "Graph":
 
     fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', 
                  title='Top 10 Individuals with the Highest Assets')
+    fig.update_traces(hovertemplate='<b>Name:</b> %{x}<br><b>Assets:</b> %{y}<br><b>Party:</b> %{customdata[1]}<br><b>Constituency:</b> %{customdata[2]}<br><b>State:</b> %{customdata[3]}')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
