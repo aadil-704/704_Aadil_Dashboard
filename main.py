@@ -41,7 +41,7 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
-    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
+    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
@@ -60,11 +60,11 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
-    fig = px.bar(young_winner, x='NAME', y='AGE', color='NAME', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
+    fig = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
     st.plotly_chart(fig)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
-    fig = px.bar(old_winner, x='NAME', y='AGE', color='NAME', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
+    fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
     st.plotly_chart(fig)
 
     df['EDUCATION'] = df['EDUCATION'].replace('Post Graduate\n', 'Post Graduate')
@@ -75,18 +75,18 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
     winner = df[df['WINNER'] == 1]
-    fig = px.bar(winner, x='EDUCATION', y='WINNER', color='WINNER', title='Winning Candidates Educational Degree').update_xaxes(categoryorder="total descending")
+    fig = px.bar(winner, x='EDUCATION', y='WINNER', color='PARTY', title='Winning Candidates Educational Degree').update_xaxes(categoryorder="total descending")
     st.plotly_chart(fig)
 
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
-    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Contest from Various Categories')
+    fig = px.bar(category, x='CATEGORY', y='COUNT', color='PARTY', title='Contest from Various Categories')
     st.plotly_chart(fig)
 
     df = df[df['WINNER'] == 1]
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
-    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
+    fig = px.bar(category, x='CATEGORY', y='COUNT', color='PARTY', title='Winners from Various Categories')
     st.plotly_chart(fig)
 
 elif tab_selector == "Analysis":
