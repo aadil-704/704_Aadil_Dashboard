@@ -10,19 +10,23 @@ if tab_selector == "Graph":
     st.subheader("Graph")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
+    
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
     fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
     st.plotly_chart(fig)
 
-    # Aggregating data to get the total number of seats won by each party in each state
+   # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON').groupby('PARTY').agg({'SEATS_WON': 'sum'}).reset_index()
 
+    # Getting the top 10 parties based on total seats won
+    top_10_parties = seats_won_by_party.nlargest(10, 'SEATS_WON')
+
     # Plotting the bar chart
-    fig = px.bar(seats_won_by_party, 
+    fig = px.bar(top_10_parties, 
                  x='PARTY', 
                  y='SEATS_WON', 
                  color='PARTY', 
-                 title='Total Number of Seats Won by Party in Each State')
+                 title='Total Number of Seats Won by Party in Each State (Top 10 Parties)')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
