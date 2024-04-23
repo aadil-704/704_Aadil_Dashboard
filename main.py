@@ -15,13 +15,13 @@ if tab_selector == "Graph":
     fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
     st.plotly_chart(fig)
 
-     # Aggregating data to get the total number of seats won by each party in each constituency
-    seats_won_by_party_in_constituency = df.groupby(['STATE', 'CONSTITUENCY', 'PARTY']).size().reset_index(name='SEATS_WON')
+    # Aggregating data to get the total number of seats won by each party in each state
+    seats_won_by_party_in_state = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
 
-    # Iterate through each constituency and plot a pie chart for seats won by each party
-    for constituency in seats_won_by_party_in_constituency['CONSTITUENCY'].unique():
-        constituency_data = seats_won_by_party_in_constituency[seats_won_by_party_in_constituency['CONSTITUENCY'] == constituency]
-        fig = px.pie(constituency_data, values='SEATS_WON', names='PARTY', title=f'Seats Won by Party in {constituency}')
+    # Iterate through each state and plot a pie chart for seats won by each party
+    for state in seats_won_by_party_in_state['STATE'].unique():
+        state_data = seats_won_by_party_in_state[seats_won_by_party_in_state['STATE'] == state]
+        fig = px.pie(state_data, values='SEATS_WON', names='PARTY', title=f'Seats Won by Party in {state}')
         st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
