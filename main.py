@@ -15,24 +15,15 @@ if tab_selector == "Graph":
     fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
     st.plotly_chart(fig)
 
-  # Get the party name from the user
-    party_name = st.sidebar.text_input("Enter Party Name", "BJP")
-
-    # Filter data for the specified party
-    party_data = df[df['PARTY'] == party_name]
-
-    # Group by state and count the number of seats won by the party in each state
-    seats_won_by_state = party_data.groupby('STATE').size().reset_index(name='SEATS_WON')
-
-    # Get the top 10 states where the party won the most seats
-    top_10_states = seats_won_by_state.nlargest(10, 'SEATS_WON')
+    # Aggregating data to get the total number of seats won by each party in each state
+    seats_won_by_party = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON').groupby('PARTY').agg({'SEATS_WON': 'sum'}).reset_index()
 
     # Plotting the bar chart
-    fig = px.bar(top_10_states, 
-                 x='STATE', 
+    fig = px.bar(seats_won_by_party, 
+                 x='PARTY', 
                  y='SEATS_WON', 
-                 color='STATE', 
-                 title=f'Top 10 States where {party_name} won the most seats')
+                 color='PARTY', 
+                 title='Total Number of Seats Won by Party in Each State')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
