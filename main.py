@@ -75,7 +75,6 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
     winner = df[df['WINNER'] == 1]
-    print(winner['PARTY'].unique())  # Add this line to check the unique values in the 'PARTY' column
     fig = px.bar(winner, x='EDUCATION', y='WINNER', color='PARTY', title='Winning Candidates Educational Degree')
     st.plotly_chart(fig)
 
