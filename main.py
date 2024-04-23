@@ -5,23 +5,29 @@ import streamlit as st
 import re
 
 def clean_assets(value):
-    # Remove any non-numeric characters except for '~' and '+'
-    cleaned_value = re.sub(r'[^\d~+]', '', value)
-    return cleaned_value
+    if isinstance(value, str):
+        # Remove any non-numeric characters except for '~' and '+'
+        cleaned_value = re.sub(r'[^\d~+]', '', value)
+        return cleaned_value
+    else:
+        return value
 
 def convert_assets(value):
-    # Convert cleaned value to integer
-    try:
-        if '~' in value and '+' in value:
-            # Extract the numeric part before '~'
-            numeric_part = value.split('~')[0].strip()
-            # Remove commas and convert to integer
-            numeric_value = int(numeric_part.replace(',', ''))
-        else:
-            numeric_value = int(value)
-        return numeric_value
-    except ValueError:
-        return np.nan
+    if isinstance(value, str):
+        # Convert cleaned value to integer
+        try:
+            if '~' in value and '+' in value:
+                # Extract the numeric part before '~'
+                numeric_part = value.split('~')[0].strip()
+                # Remove commas and convert to integer
+                numeric_value = int(numeric_part.replace(',', ''))
+            else:
+                numeric_value = int(value)
+            return numeric_value
+        except ValueError:
+            return np.nan
+    else:
+        return value
 
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
