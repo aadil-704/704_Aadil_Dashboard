@@ -2,32 +2,6 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import streamlit as st
-import re
-
-def clean_assets(value):
-    if isinstance(value, str):
-        # Remove any non-numeric characters except for '~' and '+'
-        cleaned_value = re.sub(r'[^\d~+]', '', value)
-        return cleaned_value
-    else:
-        return value
-
-def convert_assets(value):
-    if isinstance(value, str):
-        # Convert cleaned value to integer
-        try:
-            if '~' in value and '+' in value:
-                # Extract the numeric part before '~'
-                numeric_part = value.split('~')[0].strip()
-                # Remove commas and convert to integer
-                numeric_value = int(numeric_part.replace(',', ''))
-            else:
-                numeric_value = int(value)
-            return numeric_value
-        except ValueError:
-            return np.nan
-    else:
-        return value
 
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
@@ -47,9 +21,9 @@ if tab_selector == "Graph":
     fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
     st.plotly_chart(fig)
 
-    # Clean up 'ASSETS' column and convert to integer
-    df['ASSETS'] = df['ASSETS'].apply(clean_assets)
-    df['ASSETS'] = df['ASSETS'].apply(convert_assets)
+    # Clean up 'ASSETS' column and convert to float
+    df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
+    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)
 
     # Remove missing or invalid values from 'ASSETS' column
     df = df.dropna(subset=['ASSETS'])
@@ -58,6 +32,9 @@ if tab_selector == "Graph":
     individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
     
+    # Convert 'ASSETS' column to integer for count
+    individual_assets['ASSETS'] = individual_assets['ASSETS'].astype(int)
+
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
