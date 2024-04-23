@@ -23,15 +23,21 @@ if tab_selector == "Graph":
 
     # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
-    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(int)  # Convert to integer
+    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)  # Convert to float
+
+    # Fill missing values with 0
+    df['ASSETS'] = df['ASSETS'].fillna(0)
+
+    # Convert to integer
+    df['ASSETS'] = df['ASSETS'].astype(int)
 
     # Remove missing or invalid values from 'ASSETS' column
-    df = df.dropna(subset=['ASSETS'])
+    df = df[df['ASSETS'].notna()]
 
     # Group by individual's name and find the maximum assets for each individual
     individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
-    
+
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
