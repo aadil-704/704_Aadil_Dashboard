@@ -10,6 +10,10 @@ if tab_selector == "Graph":
     st.subheader("Graph")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
+    party_criminal_cases = df.groupby('PARTY')['Criminal'].sum().reset_index()
+    party_most_criminal = party_criminal_cases.loc[party_criminal_cases['Criminal'].idxmax()]
+
+    st.write(f"The party with the most criminal cases is {party_most_criminal['PARTY']} with {party_most_criminal['Criminal']} cases.")
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
