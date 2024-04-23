@@ -35,8 +35,7 @@ if tab_selector == "Graph":
     df = df[df['ASSETS'].notna()]
 
     # Group by individual's name and find the maximum assets for each individual
-    individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
-    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
+    individual_assets = df.groupby('NAME').agg({'ASSETS': 'max', 'PARTY': 'first', 'STATE': 'first', 'CONSTITUENCY': 'first'}).reset_index()    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
