@@ -22,12 +22,9 @@ if tab_selector == "Graph":
     fig = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State')
     st.plotly_chart(fig)
 
-    # Get the top 10 parties
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
-
-    # Plotting the pie chart
-    fig = px.pie(party, values='COUNT', names='PARTY', title='Top 10 Parties by Seat Count')
+    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
     st.plotly_chart(fig)
 
     df_winners = df[df['WINNER'] == 1]
