@@ -41,7 +41,7 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
-    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', title='Top 10 Individuals with the Highest Assets')
+    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
