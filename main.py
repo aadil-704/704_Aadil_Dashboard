@@ -19,10 +19,8 @@ if tab_selector == "Graph":
     seats_won_by_party_in_constituency = df.groupby(['STATE', 'CONSTITUENCY', 'PARTY']).size().reset_index(name='SEATS_WON')
 
     # Plotting the heatmap
-    fig = px.imshow(seats_won_by_party_in_constituency.pivot_table(index='PARTY', columns=['STATE', 'CONSTITUENCY'], values='SEATS_WON').fillna(0),
+    fig = px.imshow(seats_won_by_party_in_constituency.pivot_table(index='PARTY', columns=['STATE', 'CONSTITUENCY'], values='SEATS_WON', fill_value=0),
                     labels=dict(x="Constituency", y="Party", color="Seats Won"),
-                    x=seats_won_by_party_in_constituency['CONSTITUENCY'].unique(),
-                    y=seats_won_by_party_in_constituency['PARTY'].unique(),
                     color_continuous_scale='Viridis',
                     title='Seats Won by Party in Each Constituency')
     st.plotly_chart(fig)
