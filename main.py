@@ -14,6 +14,26 @@ if tab_selector == "Graph":
     fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
     st.plotly_chart(fig)
 
+
+    # Main content based on tab selection
+if tab_selector == "Graph":
+    st.subheader("Graph")
+
+    # Aggregating data to get the number of seats won by each party in each state
+    seats_won_by_party = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
+
+    # Plotting the choropleth map
+    fig = px.choropleth(seats_won_by_party, 
+                        locations='STATE', 
+                        locationmode='country names',
+                        color='SEATS_WON',
+                        hover_name='PARTY',
+                        hover_data=['SEATS_WON'],
+                        scope='asia',  # Set map scope to Asia (India)
+                        title='Number of Seats Won by Party in Each State')
+    fig.update_geos(projection_type="mercator")  # Set map projection to Mercator
+    st.plotly_chart(fig)
+
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
