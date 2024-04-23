@@ -18,10 +18,10 @@ if tab_selector == "Graph":
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df.groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
 
-    # Iterate through each state and plot a pie chart for seats won by each party
+    # Iterate through each state and plot a bar chart for seats won by each party
     for state in seats_won_by_party_in_state['STATE'].unique():
         state_data = seats_won_by_party_in_state[seats_won_by_party_in_state['STATE'] == state]
-        fig = px.pie(state_data, values='SEATS_WON', names='PARTY', title=f'Seats Won by Party in {state}')
+        fig = px.bar(state_data, x='PARTY', y='SEATS_WON', color='PARTY', title=f'Seats Won by Party in {state}')
         st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
