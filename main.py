@@ -24,17 +24,15 @@ if tab_selector == "Graph":
     # Clean up 'ASSETS' column and convert to float
     df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)
 
-    # Check if there are any missing or invalid values in the 'ASSETS' column
-    if df['ASSETS'].isnull().any():
-        st.write("The 'ASSETS' column contains missing or invalid values.")
-        st.write(df[df['ASSETS'].isnull()])
-    else:
-        # Group by individual's name and find the maximum assets for each individual
-        individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
-        individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
+    # Remove missing or invalid values from 'ASSETS' column
+    df = df.dropna(subset=['ASSETS'])
 
-        fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
-        st.plotly_chart(fig)
+    # Group by individual's name and find the maximum assets for each individual
+    individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
+    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
+
+    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='NAME', title='Top 10 Individuals with the Highest Assets')
+    st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
