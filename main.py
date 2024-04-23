@@ -80,7 +80,7 @@ if tab_selector == "Graph":
 
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
-    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY, title='Contest from Various Categories')
+    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Contest from Various Categories')
     st.plotly_chart(fig)
 
     df = df[df['WINNER'] == 1]
