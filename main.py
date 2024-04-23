@@ -27,6 +27,7 @@ if tab_selector == "Graph":
     # Check if there are any missing or invalid values in the 'ASSETS' column
     if df['ASSETS'].isnull().any():
         st.write("The 'ASSETS' column contains missing or invalid values.")
+        st.write(df[df['ASSETS'].isnull()])
     else:
         # Group by individual's name and find the maximum assets for each individual
         individual_assets = df.groupby('NAME')['ASSETS'].max().reset_index()
