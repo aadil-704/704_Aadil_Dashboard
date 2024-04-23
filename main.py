@@ -18,12 +18,11 @@ if tab_selector == "Graph":
      # Aggregating data to get the total number of seats won by each party in each constituency
     seats_won_by_party_in_constituency = df.groupby(['STATE', 'CONSTITUENCY', 'PARTY']).size().reset_index(name='SEATS_WON')
 
-    # Plotting the heatmap
-    fig = px.imshow(seats_won_by_party_in_constituency.pivot_table(index='PARTY', columns=['STATE', 'CONSTITUENCY'], values='SEATS_WON', fill_value=0),
-                    labels=dict(x="Constituency", y="Party", color="Seats Won"),
-                    color_continuous_scale='Viridis',
-                    title='Seats Won by Party in Each Constituency')
-    st.plotly_chart(fig)
+    # Iterate through each constituency and plot a pie chart for seats won by each party
+    for constituency in seats_won_by_party_in_constituency['CONSTITUENCY'].unique():
+        constituency_data = seats_won_by_party_in_constituency[seats_won_by_party_in_constituency['CONSTITUENCY'] == constituency]
+        fig = px.pie(constituency_data, values='SEATS_WON', names='PARTY', title=f'Seats Won by Party in {constituency}')
+        st.plotly_chart(fig)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
