@@ -16,10 +16,10 @@ if tab_selector == "Graph":
     df['Criminal'] = df['Criminal'].fillna(0)
 
     party_criminal_cases = df.groupby('PARTY')['Criminal'].sum().reset_index()
-    party_most_criminal = party_criminal_cases.loc[party_criminal_cases['Criminal'].idxmax()]
+    party_criminal_cases = party_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    st.write(f"The party with the most criminal cases is {party_most_criminal['PARTY']} with {party_most_criminal['Criminal']} cases.")
-
+    fig = px.bar(party_criminal_cases, x='PARTY', y='Criminal', color='PARTY', title='Top 10 Parties with the Most Criminal Cases')
+    st.plotly_chart(fig)
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
