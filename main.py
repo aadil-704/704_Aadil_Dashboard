@@ -3,14 +3,12 @@ import numpy as np
 import plotly.express as px
 import streamlit as st
 
-st.header("General Elections In India 2019")
-tab1, tab2 = st.columns(2)
+st.sidebar.header("General Elections In India 2019")
+tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
-with tab1:
+if tab_selector == "Graph":
     st.subheader("Graph")
-
     df = pd.read_csv("data.csv")
-
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
     party = df['PARTY'].value_counts().reset_index().head(10)
@@ -58,19 +56,18 @@ with tab1:
     fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
     st.plotly_chart(fig)
 
-with tab2:
+elif tab_selector == "Analysis":
     st.subheader("Analysis")
-
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
     a = df.STATE.unique()
 
-    option = st.selectbox('Select State ', a)
+    option = st.sidebar.selectbox('Select State ', a)
     df1 = df[(df['STATE'] == option)]
 
     b = df1.CONSTITUENCY.unique()
-    option2 = st.selectbox('Select Constituency ', b)
+    option2 = st.sidebar.selectbox('Select Constituency ', b)
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
