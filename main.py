@@ -23,14 +23,15 @@ if tab_selector == "Graph":
 
     # Check if 'Assets' column exists in the DataFrame
     if 'ASSETS' in df.columns:
-        # Convert 'Assets' column to numeric
-        df['ASSETS'] = df['ASSETS'].str.replace('Rs ', '').str.replace(',', '').astype(float)
+        # Clean up 'ASSETS' column and convert to float
+        df['ASSETS'] = df['ASSETS'].str.replace('Rs ', '').str.replace(',', '')
+        df['ASSETS'] = pd.to_numeric(df['ASSETS'], errors='coerce')
 
-        # Perform further operations with the 'Assets' column
-        party_richest_person = df.groupby('PARTY')['Assets'].max().reset_index()
-        party_richest_person = party_richest_person.sort_values(by='Assets', ascending=False).head(10)
+        # Perform further operations with the 'ASSETS' column
+        party_richest_person = df.groupby('PARTY')['ASSETS'].max().reset_index()
+        party_richest_person = party_richest_person.sort_values(by='ASSETS', ascending=False).head(10)
 
-        fig = px.bar(party_richest_person, x='PARTY', y='Assets', color='PARTY', title='Top 10 Parties with the Richest Person')
+        fig = px.bar(party_richest_person, x='PARTY', y='ASSETS', color='PARTY', title='Top 10 Parties with the Richest Person')
         st.plotly_chart(fig)
     else:
         st.write("The 'ASSETS' column does not exist in the dataset.")
