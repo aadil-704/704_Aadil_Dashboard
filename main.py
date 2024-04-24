@@ -129,6 +129,21 @@ if tab_selector == "Graph":
     fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
     st.plotly_chart(fig)
 
+    # Group by age and gender and count the number of politicians
+    age_cnt = ed_valid.groupby(['AGE', 'GENDER']).apply(lambda x: x['NAME'].count()).reset_index(name='Counts')
+
+    # Plot the histogram with violin overlay
+    fig = px.histogram(age_cnt, x="AGE", y='Counts', color='GENDER', marginal='violin', 
+                   title='Age Counts Distribution among the politicians', template='plotly_dark')
+
+    # Update the layout
+    fig.update_layout(title_text='Age Counts Distribution among the politicians', template='plotly_dark')
+
+    # Show the figure
+    st.plotly_chart(fig)
+
+
+
 
 
 elif tab_selector == "Analysis":
