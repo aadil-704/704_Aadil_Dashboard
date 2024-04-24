@@ -48,7 +48,7 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_winner)
 
-    # Assuming 'vote' DataFrame is already defined
+     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
 
     gndr_counts = pd.concat([
