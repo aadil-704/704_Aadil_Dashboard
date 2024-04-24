@@ -2,31 +2,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Set page configuration parameters
-st.set_page_config(
-    page_title="General Elections In India 2019 Dashboard",
-    page_icon="📊",
-    layout="wide",  # Wide layout for more content space
-    initial_sidebar_state="expanded"  # Expanded sidebar by default
-)
-
-# Custom CSS for styling
-st.markdown(
-    """
-    <style>
-    .sidebar .sidebar-content {
-        background-color: #f0f2f6;
-    }
-    .css-1aumxhk {
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0px 4px 8px rgba(38, 78, 118, 0.1);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
