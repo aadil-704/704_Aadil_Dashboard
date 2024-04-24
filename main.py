@@ -2,6 +2,8 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+
+
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
@@ -25,6 +27,9 @@ if tab_selector == "Graph":
     prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
     fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
     fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
+
+    # Streamlit UI
+    st.plotly_chart(fig)
 
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
@@ -118,3 +123,5 @@ elif tab_selector == "Analysis":
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
+File "/mount/src/704_aadil_dashboard/main.py", line 35
+      seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
