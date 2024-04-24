@@ -114,11 +114,7 @@ if tab_selector == "Graph":
     fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
 
-    df = df[df['WINNER'] == 1]
-    category = df['CATEGORY'].value_counts().reset_index()
-    category.columns = ['CATEGORY', 'COUNT']
-    fig_category = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories', template='plotly_dark')
-    st.plotly_chart(fig_category)
+   
 
     # Filter and count overall category
     cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
