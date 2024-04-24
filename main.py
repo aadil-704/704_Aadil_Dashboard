@@ -51,7 +51,10 @@ if tab_selector == "Graph":
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
 
-   
+    gndr_counts = pd.concat([
+        vote_gndr.groupby('GENDER')['NAME'].count().rename('Counts').reset_index(),
+        vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
+    ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
     st.write(gndr_counts)  # Add this line to check DataFrame structure
     
