@@ -2,6 +2,9 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+# Set the theme for the entire dashboard
+st.set_page_config(layout="wide", page_title="General Elections In India 2019", page_icon="🗳️")
+
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
@@ -14,6 +17,10 @@ if tab_selector == "Graph":
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
+    # Customize the appearance of the bar chart
+    fig_num_cons.update_traces(marker_color='rgb(158,202,225)', marker_line_color='rgb(8,48,107)',
+                          marker_line_width=1.5, opacity=0.6)
+
     # Plotting the bar chart for each state
     st.plotly_chart(fig_num_cons)
 
@@ -24,6 +31,11 @@ if tab_selector == "Graph":
     prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
     prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
     fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
+
+    # Customize the appearance of the scatter plot
+    fig.update_traces(marker=dict(color='rgb(158,202,225)', size=12, line=dict(color='MediumPurple', width=2)),
+                  selector=dict(mode='markers'))
+
     fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
 
     # Streamlit UI
@@ -143,6 +155,10 @@ if tab_selector == "Graph":
                   yaxis_title="Count",
                   title_text='Age Distribution of Winning Politicians by Gender',
                   template='plotly_dark')
+
+    # Customize the appearance of the histogram
+    fig.update_traces(marker_color='rgb(158,202,225)', marker_line_color='rgb(8,48,107)',
+                          marker_line_width=1.5, opacity=0.6)
 
     # Show the figure
     st.plotly_chart(fig)
