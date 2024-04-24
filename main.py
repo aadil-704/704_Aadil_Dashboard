@@ -121,3 +121,15 @@ elif tab_selector == "Analysis":
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
+
+    # Assuming 'vote' DataFrame is already defined
+    vote_gndr = vote[vote['PARTY'] != 'NOTA']
+
+    gndr_counts = pd.concat([
+        vote_gndr.groupby('GENDER')['NAME'].count().rename('Counts').reset_index(),
+        vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
+    ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
+
+    fig = px.bar(gndr_counts, x='GENDER', y='Counts', color='level_0', barmode='group')
+    fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
+    st.plotly_chart(fig)
