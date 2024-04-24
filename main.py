@@ -8,6 +8,9 @@ vote_prty = vote[vote['PARTY'] != 'NOTA']
 prty_cnt = vote_prty.groupby('PARTY')['CONSTITUENCY'].count().reset_index(name='# Constituency')
 prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
 prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
+fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
+fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
+fig.show()
 
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
