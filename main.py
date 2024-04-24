@@ -2,17 +2,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Read the data and preprocess if necessary
-vote = pd.read_csv("data.csv")  # Replace "data.csv" with your actual data file name
-vote_prty = vote[vote['PARTY'] != 'NOTA']
-prty_cnt = vote_prty.groupby('PARTY')['CONSTITUENCY'].count().reset_index(name='# Constituency')
-prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
-prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
-fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
-fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
 
-# Streamlit UI
-st.plotly_chart(fig)
 
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
@@ -28,6 +18,18 @@ if tab_selector == "Graph":
 
     # Plotting the bar chart for each state
     st.plotly_chart(fig_num_cons)
+
+    # Read the data and preprocess if necessary
+vote = pd.read_csv("data.csv")  # Replace "data.csv" with your actual data file name
+vote_prty = vote[vote['PARTY'] != 'NOTA']
+prty_cnt = vote_prty.groupby('PARTY')['CONSTITUENCY'].count().reset_index(name='# Constituency')
+prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
+prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
+fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
+fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
+
+# Streamlit UI
+st.plotly_chart(fig)
 
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
