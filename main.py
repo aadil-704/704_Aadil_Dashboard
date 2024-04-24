@@ -135,18 +135,17 @@ if tab_selector == "Graph":
     # Define the age ranges or bins for the histogram
     age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
 
-    # Create a histogram of age distribution for winning politicians
-    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), title='Age Distribution of Winning Politicians', template='plotly_dark')
+    # Create a histogram of age distribution for winning politicians with color based on gender
+    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
 
     # Update the layout
     fig.update_layout(xaxis_title="Age",
                   yaxis_title="Count",
-                  title_text='Age Distribution of Winning Politicians',
+                  title_text='Age Distribution of Winning Politicians by Gender',
                   template='plotly_dark')
 
     # Show the figure
     st.plotly_chart(fig)
-
     
 
 
