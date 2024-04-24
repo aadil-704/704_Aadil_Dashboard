@@ -2,6 +2,9 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+print(gndr_counts.head())
+print(gndr_counts.columns)
+
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
