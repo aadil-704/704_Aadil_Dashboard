@@ -146,10 +146,6 @@ if tab_selector == "Graph":
 
     # Show the figure
     st.plotly_chart(fig)
-    
-
-
-
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
@@ -166,3 +162,10 @@ elif tab_selector == "Analysis":
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
+
+    # Add a graph here based on the filtered data
+    if not df2.empty:
+        # Plot a graph based on the selected state and constituency
+        party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
+        fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
+        st.plotly_chart(fig_party_votes)
