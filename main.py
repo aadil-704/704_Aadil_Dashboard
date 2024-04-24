@@ -94,26 +94,21 @@ if tab_selector == "Graph":
     # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
     df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)  # Convert to float
-
-    # Fill missing values with 0
-    df['ASSETS'] = df['ASSETS'].fillna(0)
-
-    # Convert to integer
-    df['ASSETS'] = df['ASSETS'].astype(int)
+    df['ASSETS'] = df['ASSETS'].fillna(0)  # Fill missing values with 0
+    df['ASSETS'] = df['ASSETS'].astype(int)  # Convert to integer
 
     # Remove missing or invalid values from 'ASSETS' column
     df = df[df['ASSETS'].notna()]
 
     # Group by individual's name and find the maximum assets, party, state, and constituency for each individual
     individual_assets = df.groupby('NAME').agg({'ASSETS': 'max', 'PARTY': 'first', 'STATE': 'first', 'CONSTITUENCY': 'first'}).reset_index()
+
+    # Sort by count of assets in descending order and select top 10
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
-    # Sort by count of assets in descending order
-    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
-
-    fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
+    # Plot the scatter plot
+    fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
-
    
 
     # Filter and count overall category
