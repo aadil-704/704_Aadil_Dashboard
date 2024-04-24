@@ -10,7 +10,6 @@ prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# Stat
 prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
 fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
 fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
-fig.show()
 
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
@@ -22,42 +21,48 @@ if tab_selector == "Graph":
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
-    fig = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
-    st.plotly_chart(fig)
+    fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
+
+    # Plotting the bar chart for each state
+    st.plotly_chart(fig_num_cons)
 
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
+    fig_seats_won = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State')
 
-    # Plotting the bar chart for each state
-    fig = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State')
-    st.plotly_chart(fig)
+    st.plotly_chart(fig_seats_won)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
-    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
-    st.plotly_chart(fig)
+    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
+
+    st.plotly_chart(fig_party)
 
     df_winners = df[df['WINNER'] == 1]
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
     winner.columns = ['PARTY', 'COUNT']
-    fig = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
-    st.plotly_chart(fig)
+    fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
+
+    st.plotly_chart(fig_winner)
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
-    fig = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
-    st.plotly_chart(fig)
+    fig_young_winner = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
+
+    st.plotly_chart(fig_young_winner)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
-    fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
-    st.plotly_chart(fig)
+    fig_old_winner = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
+
+    st.plotly_chart(fig_old_winner)
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
     winner_education.columns = ['EDUCATION', 'COUNT']
 
     # Plot the bar chart for winning candidates' educational degrees
-    fig = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
-    st.plotly_chart(fig)
+    fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
+
+    st.plotly_chart(fig_winner_education)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
@@ -66,8 +71,8 @@ if tab_selector == "Graph":
     individual_criminal_cases = df.groupby('NAME')['Criminal'].sum().reset_index()
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    fig = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases')
-    st.plotly_chart(fig)
+    fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases')
+    st.plotly_chart(fig_individual_criminal_cases)
 
     # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
@@ -89,14 +94,14 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
-    fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
-    st.plotly_chart(fig)
+    fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
+    st.plotly_chart(fig_individual_assets)
 
     df = df[df['WINNER'] == 1]
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
-    fig = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
-    st.plotly_chart(fig)
+    fig_category = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
+    st.plotly_chart(fig_category)
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
