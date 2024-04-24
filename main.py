@@ -2,9 +2,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-print(gndr_counts.head())
-print(gndr_counts.columns)
-
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
@@ -50,18 +47,6 @@ if tab_selector == "Graph":
     fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
 
     st.plotly_chart(fig_winner)
-
-    # Assuming 'vote' DataFrame is already defined
-    vote_gndr = vote[vote['PARTY'] != 'NOTA']
-
-    gndr_counts = pd.concat([
-        vote_gndr.groupby('GENDER')['NAME'].count().rename('Counts').reset_index(),
-        vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
-    ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
-
-    fig = px.bar(gndr_counts, x='GENDER', y='Counts', color='level_0', barmode='group')
-    fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
-    st.plotly_chart(fig)
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
     fig_young_winner = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners')
@@ -136,3 +121,15 @@ elif tab_selector == "Analysis":
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
+
+    # Assuming 'vote' DataFrame is already defined
+    vote_gndr = vote[vote['PARTY'] != 'NOTA']
+
+    gndr_counts = pd.concat([
+        vote_gndr.groupby('GENDER')['NAME'].count().rename('Counts').reset_index(),
+        vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
+    ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
+
+    fig = px.bar(gndr_counts, x='GENDER', y='Counts', color='level_0', barmode='group')
+    fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
+    st.plotly_chart(fig)
