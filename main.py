@@ -56,7 +56,7 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
-    st.write(gndr_counts)  # Add this line to check DataFrame structure
+   
     
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
