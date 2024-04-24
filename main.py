@@ -2,8 +2,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-
-
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
@@ -123,5 +121,3 @@ elif tab_selector == "Analysis":
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
-File "/mount/src/704_aadil_dashboard/main.py", line 35
-      seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
