@@ -14,12 +14,6 @@ if tab_selector == "Graph":
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
-    # Add hover tooltip
-    fig_num_cons.update_traces(hovertemplate='<b>%{y}</b> constituencies in %{x}')
-
-    # Enable zooming and panning
-    fig_num_cons.update_layout(xaxis=dict(fixedrange=False), yaxis=dict(fixedrange=False))
-
     # Plotting the bar chart for each state
     st.plotly_chart(fig_num_cons)
 
@@ -30,13 +24,6 @@ if tab_selector == "Graph":
     prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
     prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
     fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
-
-    # Add hover tooltip
-    fig.update_traces(hovertemplate='<b>%{x}</b> constituencies, %{y} states')
-
-    # Enable zooming and panning
-    fig.update_layout(xaxis=dict(fixedrange=False), yaxis=dict(fixedrange=False))
-
     fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
 
     # Streamlit UI
@@ -156,13 +143,6 @@ if tab_selector == "Graph":
                   yaxis_title="Count",
                   title_text='Age Distribution of Winning Politicians by Gender',
                   template='plotly_dark')
-
-    # Enable selection tool for zooming
-    fig.update_layout(
-        dragmode='select',
-        title_text='Age Distribution of Winning Politicians by Gender (Zoom in by selecting an area)',
-        title_x=0.5
-    )
 
     # Show the figure
     st.plotly_chart(fig)
