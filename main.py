@@ -3,8 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 # Streamlit UI
-st.sidebar.title("General Elections In India 2019")
-st.sidebar.subheader("Explore Data")
+st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
@@ -16,7 +15,7 @@ if tab_selector == "Graph":
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
     # Plotting the bar chart for each state
-    st.plotly_chart(fig_num_cons)
+    st.plotly_chart(fig_num_cons, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Read the data and preprocess if necessary
     vote = pd.read_csv("data.csv")  # Replace "data.csv" with your actual data file name
@@ -28,26 +27,26 @@ if tab_selector == "Graph":
     fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
 
     # Streamlit UI
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
     fig_seats_won = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State', template='plotly_dark')
 
-    st.plotly_chart(fig_seats_won)
+    st.plotly_chart(fig_seats_won, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
 
-    st.plotly_chart(fig_party)
+    st.plotly_chart(fig_party, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     df_winners = df[df['WINNER'] == 1]
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
     winner.columns = ['PARTY', 'COUNT']
     fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party', template='plotly_dark')
 
-    st.plotly_chart(fig_winner)
+    st.plotly_chart(fig_winner, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
@@ -57,19 +56,22 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
+   
+    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
-    st.plotly_chart(fig)
+
+    st.plotly_chart(fig, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
     fig_young_winner = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners', template='plotly_dark')
 
-    st.plotly_chart(fig_young_winner)
+    st.plotly_chart(fig_young_winner, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
     fig_old_winner = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:', template='plotly_dark')
 
-    st.plotly_chart(fig_old_winner)
+    st.plotly_chart(fig_old_winner, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
@@ -78,7 +80,7 @@ if tab_selector == "Graph":
     # Plot the bar chart for winning candidates' educational degrees
     fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree', template='plotly_dark')
 
-    st.plotly_chart(fig_winner_education)
+    st.plotly_chart(fig_winner_education, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
@@ -88,7 +90,7 @@ if tab_selector == "Graph":
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
     fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases', template='plotly_dark')
-    st.plotly_chart(fig_individual_criminal_cases)
+    st.plotly_chart(fig_individual_criminal_cases, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
@@ -107,8 +109,7 @@ if tab_selector == "Graph":
 
     # Plot the scatter plot
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
-    st.plotly_chart(fig_individual_assets)
-   
+    st.plotly_chart(fig_individual_assets, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Filter and count overall category
     cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
@@ -126,7 +127,7 @@ if tab_selector == "Graph":
     # Plot the bar chart
     fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
     # Filter to include only winning politicians
     winners = df[df['WINNER'] == 1]
@@ -144,10 +145,10 @@ if tab_selector == "Graph":
                   template='plotly_dark')
 
     # Show the figure
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)  # Set 'use_container_width' to True for responsive width
 
 elif tab_selector == "Analysis":
-    st.sidebar.subheader("Filter Data")
+    st.subheader("Analysis")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
