@@ -8,7 +8,6 @@ tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
     st.subheader("Graph")
-    st.write("This section displays various graphs related to the general elections in India 2019.")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
@@ -154,7 +153,6 @@ if tab_selector == "Graph":
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
-    st.write("This section provides detailed analysis based on user-selected state and constituency.")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
