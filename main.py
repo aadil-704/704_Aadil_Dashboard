@@ -1,8 +1,15 @@
 import pandas as pd
-import numpy as np
 import plotly.express as px
 import streamlit as st
 
+# Read the data and preprocess if necessary
+vote = pd.read_csv("your_data.csv")  # Replace "your_data.csv" with your actual data file name
+vote_prty = vote[vote['PARTY'] != 'NOTA']
+prty_cnt = vote_prty.groupby('PARTY')['CONSTITUENCY'].count().reset_index(name='# Constituency')
+prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
+prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
+
+# Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
@@ -40,8 +47,6 @@ if tab_selector == "Graph":
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
     fig = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:')
     st.plotly_chart(fig)
-
-    
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
@@ -83,7 +88,6 @@ if tab_selector == "Graph":
 
     fig = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
     st.plotly_chart(fig)
-    
 
     df = df[df['WINNER'] == 1]
     category = df['CATEGORY'].value_counts().reset_index()
