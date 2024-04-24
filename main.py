@@ -3,7 +3,8 @@ import plotly.express as px
 import streamlit as st
 
 # Streamlit UI
-st.sidebar.header("General Elections In India 2019")
+st.sidebar.title("General Elections In India 2019")
+st.sidebar.subheader("Explore Data")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
@@ -56,8 +57,6 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
-   
-    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
@@ -146,13 +145,9 @@ if tab_selector == "Graph":
 
     # Show the figure
     st.plotly_chart(fig)
-    
-
-
-
 
 elif tab_selector == "Analysis":
-    st.subheader("Analysis")
+    st.sidebar.subheader("Filter Data")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
