@@ -58,7 +58,7 @@ if tab_selector == "Graph":
 
     st.write(gndr_counts)  # Add this line to check DataFrame structure
     
-    fig = px.bar(gndr_counts, x='GENDER', y='Counts', color='level_0', barmode='group')
+    fig = px.bar(gndr_counts, x='GENDER', y='Counts', color='index', barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
 
