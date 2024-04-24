@@ -12,7 +12,7 @@ if tab_selector == "Graph":
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
-    fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State')
+    fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State, template='plotly_dark')
 
     # Plotting the bar chart for each state
     st.plotly_chart(fig_num_cons)
@@ -31,20 +31,20 @@ if tab_selector == "Graph":
 
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
-    fig_seats_won = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State')
+    fig_seats_won = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State, template='plotly_dark')
 
     st.plotly_chart(fig_seats_won)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
-    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
+    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party, template='plotly_dark')
 
     st.plotly_chart(fig_party)
 
     df_winners = df[df['WINNER'] == 1]
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
     winner.columns = ['PARTY', 'COUNT']
-    fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party')
+    fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party, template='plotly_dark')
 
     st.plotly_chart(fig_winner)
 
@@ -77,7 +77,7 @@ if tab_selector == "Graph":
     winner_education.columns = ['EDUCATION', 'COUNT']
 
     # Plot the bar chart for winning candidates' educational degrees
-    fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree')
+    fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree, template='plotly_dark')
 
     st.plotly_chart(fig_winner_education)
 
@@ -88,7 +88,7 @@ if tab_selector == "Graph":
     individual_criminal_cases = df.groupby('NAME')['Criminal'].sum().reset_index()
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases')
+    fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases, template='plotly_dark')
     st.plotly_chart(fig_individual_criminal_cases)
 
     # Clean up 'ASSETS' column and convert to integer
@@ -111,13 +111,13 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False)
 
-    fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets')
+    fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets, template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
 
     df = df[df['WINNER'] == 1]
     category = df['CATEGORY'].value_counts().reset_index()
     category.columns = ['CATEGORY', 'COUNT']
-    fig_category = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories')
+    fig_category = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories, template='plotly_dark')
     st.plotly_chart(fig_category)
 
 elif tab_selector == "Analysis":
