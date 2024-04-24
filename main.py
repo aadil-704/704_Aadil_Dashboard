@@ -120,6 +120,26 @@ if tab_selector == "Graph":
     fig_category = px.bar(category, x='CATEGORY', y='COUNT', color='CATEGORY', title='Winners from Various Categories', template='plotly_dark')
     st.plotly_chart(fig_category)
 
+    # Filter and count overall category
+    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
+    cat_overall.columns = ['CATEGORY', 'Counts']
+    cat_overall['Category'] = 'Overall Category Counts'
+
+    # Filter and count winning category
+    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
+    cat_winner.columns = ['CATEGORY', 'Counts']
+    cat_winner['Category'] = 'Winning Category Ratio'
+
+    # Concatenate overall and winning category counts
+    cat_overl_win = pd.concat([cat_winner, cat_overall])
+
+    # Plot the bar chart
+    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
+    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
+    st.plotly_chart(fig)
+
+
+
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
     df = pd.read_csv("data.csv")
