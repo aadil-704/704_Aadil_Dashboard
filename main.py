@@ -3,7 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 # Read the data and preprocess if necessary
-vote = pd.read_csv("your_data.csv")  # Replace "your_data.csv" with your actual data file name
+vote = pd.read_csv("data.csv")  # Replace "your_data.csv" with your actual data file name
 vote_prty = vote[vote['PARTY'] != 'NOTA']
 prty_cnt = vote_prty.groupby('PARTY')['CONSTITUENCY'].count().reset_index(name='# Constituency')
 prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
