@@ -35,13 +35,11 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_seats_won)
 
-    # Using Pie Chart
-    fig_party_pie = px.pie(party, values='COUNT', names='PARTY', title='Distribution of Seats Contested by Party')
-    st.plotly_chart(fig_party_pie)
+    party = df['PARTY'].value_counts().reset_index().head(10)
+    party.columns = ['PARTY', 'COUNT']
+    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
 
-    # Using Treemap
-    fig_party_treemap = px.treemap(party, path=['PARTY'], values='COUNT', title='Seat Distribution by Party')
-    st.plotly_chart(fig_party_treemap)
+    st.plotly_chart(fig_party)
 
     df_winners = df[df['WINNER'] == 1]
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
@@ -153,10 +151,6 @@ elif tab_selector == "Analysis":
     st.subheader("Analysis")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
-
-    # Calculate the distribution of seats contested by each party
-    party = df['PARTY'].value_counts().reset_index().head(10)
-    party.columns = ['PARTY', 'COUNT']
 
     a = df.STATE.unique()
 
