@@ -4,6 +4,13 @@ import streamlit as st
 
 # Streamlit UI
 st.header("General Elections In India 2019")
+st.sidebar.header("About")
+st.sidebar.text("This application provides insights into the General Elections in India 2019.")
+
+# Sidebar for comments
+st.sidebar.header("Comments")
+user_comments = st.sidebar.text_area("Please share your comments here:")
+
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
