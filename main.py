@@ -104,14 +104,22 @@ elif tab_selector == "Graph":
 
     st.plotly_chart(fig_old_winner)
 
-    df_winners = df[df['WINNER'] == 1]  # Filter winners
-    winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
-    winner_education.columns = ['EDUCATION', 'COUNT']
+    # Filter the DataFrame to include only winners
+    df_winners = df[df['WINNER'] == 1]
 
-    # Plot the bar chart for winning candidates' educational degrees
-    fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree', template='plotly_dark')
+    # Count the number of winners for each education level
+    winner_education_counts = df_winners['EDUCATION'].value_counts().reset_index()
 
-    st.plotly_chart(fig_winner_education)
+    # Rename columns
+    winner_education_counts.columns = ['EDUCATION', 'COUNT']
+
+    # Create the pie chart
+    fig_winner_education_pie = px.pie(winner_education_counts, values='COUNT', names='EDUCATION',
+                                   title='Educational Degrees of Winning Candidates',
+                                   template='plotly_dark')
+
+    # Display the pie chart
+    st.plotly_chart(fig_winner_education_pie)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
