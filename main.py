@@ -11,16 +11,6 @@ if tab_selector == "Graph":
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
-    # Group by state and constituency to count the number of seats in each region
-    region_distribution = df.groupby(['STATE', 'CONSTITUENCY']).size().reset_index(name='SEATS')
-
-    # Plotting the region-wise distribution of seats
-    fig_region_distribution = px.bar(region_distribution, x='STATE', y='SEATS', color='STATE', title='Region-wise Distribution of Seats', template='plotly_dark')
-
-    # Show the plot
-    st.plotly_chart(fig_region_distribution)
-    
-    
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
