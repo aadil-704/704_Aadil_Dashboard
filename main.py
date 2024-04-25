@@ -3,8 +3,9 @@ import plotly.express as px
 import streamlit as st
 
 # Streamlit UI
-st.sidebar.header("General Elections In India 2019")
+st.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
+
 
 if tab_selector == "Graph":
     st.subheader("Graph")
