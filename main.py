@@ -83,10 +83,9 @@ if tab_selector == "Graph":
                               color='EDUCATION',  # Change to color='PARTY' for coloring by party
                               title='Winning Candidates Educational Degree', 
                               template='plotly_dark',
-                              hover_data=['PARTY', 'STATE', 'CONSTITUENCY'])  # Add hover data for party, state, and constituency
+                              hover_data={'EDUCATION': False, 'COUNT': True})  # Add hover data for count only
 
-    st.plotly_chart(fig_winner_education)
-
+     st.plotly_chart(fig_winner_education)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
