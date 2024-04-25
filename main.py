@@ -15,7 +15,7 @@ if tab_selector == "Graph":
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
     # Plotting the bar chart for each state
-    st.sidebar.plotly_chart(fig_num_cons)
+    st.plotly_chart(fig_num_cons)
 
     # Read the data and preprocess if necessary
     vote = pd.read_csv("data.csv")  # Replace "data.csv" with your actual data file name
@@ -27,26 +27,26 @@ if tab_selector == "Graph":
     fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
 
     # Streamlit UI
-    st.sidebar.plotly_chart(fig)
+    st.plotly_chart(fig)
 
     # Aggregating data to get the total number of seats won by each party in each state
     seats_won_by_party_in_state = df[df['WINNER'] == 1].groupby(['STATE', 'PARTY']).size().reset_index(name='SEATS_WON')
     fig_seats_won = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State', template='plotly_dark')
 
-    st.sidebar.plotly_chart(fig_seats_won)
+    st.plotly_chart(fig_seats_won)
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
     fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
 
-    st.sidebar.plotly_chart(fig_party)
+    st.plotly_chart(fig_party)
 
     df_winners = df[df['WINNER'] == 1]
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
     winner.columns = ['PARTY', 'COUNT']
     fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party', template='plotly_dark')
 
-    st.sidebar.plotly_chart(fig_winner)
+    st.plotly_chart(fig_winner)
 
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
@@ -60,17 +60,17 @@ if tab_selector == "Graph":
     
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
-    st.sidebar.plotly_chart(fig)
+    st.plotly_chart(fig)
 
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
     fig_young_winner = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners', template='plotly_dark')
 
-    st.sidebar.plotly_chart(fig_young_winner)
+    st.plotly_chart(fig_young_winner)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
     fig_old_winner = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:', template='plotly_dark')
 
-    st.sidebar.plotly_chart(fig_old_winner)
+    st.plotly_chart(fig_old_winner)
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
@@ -79,7 +79,7 @@ if tab_selector == "Graph":
     # Plot the bar chart for winning candidates' educational degrees
     fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree', template='plotly_dark')
 
-    st.sidebar.plotly_chart(fig_winner_education)
+    st.plotly_chart(fig_winner_education)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
@@ -89,7 +89,7 @@ if tab_selector == "Graph":
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
     fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases', template='plotly_dark')
-    st.sidebar.plotly_chart(fig_individual_criminal_cases)
+    st.plotly_chart(fig_individual_criminal_cases)
 
     # Clean up 'ASSETS' column and convert to integer
     df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
@@ -113,7 +113,7 @@ if tab_selector == "Graph":
                                  template='plotly_dark')
 
     # Display the bar chart
-    st.sidebar.plotly_chart(fig_individual_assets)
+    st.plotly_chart(fig_individual_assets)
    
 
     # Filter and count overall category
@@ -132,7 +132,7 @@ if tab_selector == "Graph":
     # Plot the bar chart
     fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
-    st.sidebar.plotly_chart(fig)
+    st.plotly_chart(fig)
 
     # Filter to include only winning politicians
     winners = df[df['WINNER'] == 1]
@@ -150,7 +150,7 @@ if tab_selector == "Graph":
                   template='plotly_dark')
 
     # Show the figure
-    st.sidebar.plotly_chart(fig)
+    st.plotly_chart(fig)
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
@@ -173,4 +173,4 @@ elif tab_selector == "Analysis":
         # Plot a graph based on the selected state and constituency
         party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
-        st.sidebar.plotly_chart(fig_party_votes)
+        st.plotly_chart(fig_party_votes)
