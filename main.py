@@ -21,6 +21,7 @@ if tab_selector == "Analysis":
 
     df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
     st.write(df2)
+   
 
     # Add a graph here based on the filtered data
     if not df2.empty:
@@ -132,3 +133,39 @@ elif tab_selector == "Graph":
     # Plot the scatter plot
     fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
+
+    # Filter and count overall category
+    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
+    cat_overall.columns = ['CATEGORY', 'Counts']
+    cat_overall['Category'] = 'Overall Category Counts'
+
+    # Filter and count winning category
+    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
+    cat_winner.columns = ['CATEGORY', 'Counts']
+    cat_winner['Category'] = 'Winning Category Ratio'
+
+    # Concatenate overall and winning category counts
+    cat_overl_win = pd.concat([cat_winner, cat_overall])
+
+    # Plot the bar chart
+    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
+    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
+    st.plotly_chart(fig)
+
+    # Filter to include only winning politicians
+    winners = df[df['WINNER'] == 1]
+
+    # Define the age ranges or bins for the histogram
+    age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+    # Create a histogram of age distribution for winning politicians with color based on gender
+    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
+
+    # Update the layout
+    fig.update_layout(xaxis_title="Age",
+                  yaxis_title="Count",
+                  title_text='Age Distribution of Winning Politicians by Gender',
+                  template='plotly_dark')
+
+    # Show the figure
+    st.plotly_chart(fig)
