@@ -35,18 +35,28 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_seats_won)
 
-    party = df['PARTY'].value_counts().reset_index().head(10)
-    party.columns = ['PARTY', 'COUNT']
-    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
+    # Count the number of seats contested by each party
+    party_contest = df['PARTY'].value_counts().reset_index().head(10)
+    party_contest.columns = ['PARTY', 'CONTEST_COUNT']
 
-    st.plotly_chart(fig_party)
+   # Filter the DataFrame to include only winners
+   df_winners = df[df['WINNER'] == 1]
 
-    df_winners = df[df['WINNER'] == 1]
-    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
-    winner.columns = ['PARTY', 'COUNT']
-    fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party', template='plotly_dark')
+   # Count the number of seats won by each party
+   winner = df_winners['PARTY'].value_counts().reset_index().head(10)
+   winner.columns = ['PARTY', 'WIN_COUNT']
 
-    st.plotly_chart(fig_winner)
+   # Merge the two DataFrames on 'PARTY'
+   merged_df = party_contest.merge(winner, on='PARTY', how='outer').fillna(0)
+
+   # Plot the combined bar chart
+   fig_combined = px.bar(merged_df, x='PARTY', y=['CONTEST_COUNT', 'WIN_COUNT'], barmode='group',
+                      labels={'value': 'Count', 'variable': 'Type'}, title='Seats Contested vs Won by Party',
+                      template='plotly_dark')
+
+   # Display the combined bar chart
+   st.plotly_chart(fig_combined)
+
 
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
