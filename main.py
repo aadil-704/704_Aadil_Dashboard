@@ -56,8 +56,6 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
-   
-    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
@@ -109,7 +107,6 @@ if tab_selector == "Graph":
     # Plot the scatter plot
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
-   
 
     # Filter and count overall category
     cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
@@ -140,9 +137,9 @@ if tab_selector == "Graph":
 
     # Update the layout
     fig.update_layout(xaxis_title="Age",
-                  yaxis_title="Count",
-                  title_text='Age Distribution of Winning Politicians by Gender',
-                  template='plotly_dark')
+                      yaxis_title="Count",
+                      title_text='Age Distribution of Winning Politicians by Gender',
+                      template='plotly_dark')
 
     # Show the figure
     st.plotly_chart(fig)
@@ -169,3 +166,14 @@ elif tab_selector == "Analysis":
         party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
+
+        # Age and gender selection
+        age_range = st.sidebar.slider("Select Age Range", min_value=20, max_value=100, value=(20, 40), step=1)
+        gender = st.sidebar.radio("Select Gender", ["Male", "Female"])
+
+        # Filter winners based on selected age range and gender
+        filtered_winners = winners[(winners['AGE'] >= age_range[0]) & (winners['AGE'] <= age_range[1]) & (winners['GENDER'] == gender)]
+
+        # Display the filtered winners
+        st.subheader("Winning Candidates")
+        st.write(filtered_winners[['NAME', 'PARTY', 'CONSTITUENCY', 'STATE']])
