@@ -75,13 +75,16 @@ if tab_selector == "Graph":
     # Filter the DataFrame to include only winners and select the top 10 youngest winners
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
 
-    # Create a treemap chart
-    fig_young_winner_treemap = px.treemap(young_winner, path=['PARTY', 'NAME'], values='AGE',
-                                      color='AGE', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'],
-                                      title='Top 10 Youngest Winners', template='plotly_dark')
+   # Filter the DataFrame to include only winners and select the top 10 youngest winners
+   young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
 
-    # Display the treemap chart
-    st.plotly_chart(fig_young_winner_treemap)
+   # Create a bubble chart
+   fig_young_winner_bubble = px.scatter(young_winner, x='NAME', y='AGE', color='PARTY', size='AGE',
+                                     hover_data=['PARTY', 'STATE', 'CONSTITUENCY'],
+                                     title='Top 10 Youngest Winners', template='plotly_dark')
+
+   # Display the bubble chart
+   st.plotly_chart(fig_young_winner_bubble)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
     fig_old_winner = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:', template='plotly_dark')
