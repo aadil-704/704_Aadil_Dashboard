@@ -148,6 +148,17 @@ if tab_selector == "Graph":
 
     # Show the figure
     st.plotly_chart(fig)
+    
+     # Age and gender selection
+     age_range = st.sidebar.slider("Select Age Range", min_value=20, max_value=100, value=(20, 40), step=1)
+     gender = st.sidebar.radio("Select Gender", ["Male", "Female"])
+
+     # Filter winners based on selected age range and gender
+     filtered_winners = winners[(winners['AGE'] >= age_range[0]) & (winners['AGE'] <= age_range[1]) & (winners['GENDER'] == gender)]
+
+     # Display the filtered winners
+     st.subheader("Winning Candidates")
+     st.write(filtered_winners[['NAME', 'PARTY', 'CONSTITUENCY', 'STATE']])
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
@@ -170,13 +181,4 @@ elif tab_selector == "Analysis":
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
 
-        # Age and gender selection
-        age_range = st.sidebar.slider("Select Age Range", min_value=20, max_value=100, value=(20, 40), step=1)
-        gender = st.sidebar.radio("Select Gender", ["Male", "Female"])
-
-        # Filter winners based on selected age range and gender
-        filtered_winners = winners[(winners['AGE'] >= age_range[0]) & (winners['AGE'] <= age_range[1]) & (winners['GENDER'] == gender)]
-
-        # Display the filtered winners
-        st.subheader("Winning Candidates")
-        st.write(filtered_winners[['NAME', 'PARTY', 'CONSTITUENCY', 'STATE']])
+       
