@@ -77,10 +77,6 @@ if tab_selector == "Graph":
         winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
         winner_education.columns = ['EDUCATION', 'COUNT']
 
-        # Print the winner_education DataFrame to inspect its structure
-        print("Winner Education DataFrame:")
-        print(winner_education)
-
         # Plot the bar chart for winning candidates' educational degrees
         fig_winner_education = px.bar(winner_education, 
                                       x='EDUCATION', 
@@ -88,7 +84,7 @@ if tab_selector == "Graph":
                                       color='EDUCATION',  # Change to color='PARTY' for coloring by party
                                       title='Winning Candidates Educational Degree', 
                                       template='plotly_dark',
-                                      hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY': True, 'STATE': True, 'CONSTITUENCY': True})  # Add hover data for count only
+                                      hover_data={'EDUCATION': False, 'COUNT': True})  # Remove 'PARTY', 'STATE', and 'CONSTITUENCY' from hover data
         st.plotly_chart(fig_winner_education)
     except Exception as e:
         st.error(f"Error: {e}")
