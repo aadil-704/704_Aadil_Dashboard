@@ -4,7 +4,7 @@ import streamlit as st
 
 # Streamlit UI
 st.header("General Elections In India 2019")
-tab_selector = st.sidebar.radio("Select Tab", ("Analysis", "Graph"))
+tab_selector = st.sidebar.radio("Select Tab", ("Analysis", "Graphical Visualization"))
 
 if tab_selector == "Analysis":
    
@@ -30,7 +30,7 @@ if tab_selector == "Analysis":
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
 
-elif tab_selector == "Graph":
+elif tab_selector == "Graphical Visualization":
   
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
