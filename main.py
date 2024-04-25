@@ -106,8 +106,13 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order and select top 10
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
-    # Plot the scatter plot
-    fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
+    # Plot the line chart
+    fig_individual_assets = px.line(individual_assets, x='NAME', y='ASSETS', color='PARTY', 
+                                 hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], 
+                                 title='Top 10 Individuals with the Highest Assets', 
+                                 template='plotly_dark')
+
+    # Display the line chart
     st.plotly_chart(fig_individual_assets)
    
 
