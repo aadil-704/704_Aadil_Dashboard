@@ -169,3 +169,45 @@ elif tab_selector == "Analysis":
         party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
+
+ # Calculate voter turnout for constituencies and states
+    total_voters = df.groupby(["STATE", "CONSTITUENCY"])[["TOTAL VOTES"]].sum()
+    total_electors = winners.groupby(["STATE", "CONSTITUENCY"])[["TOTAL ELECTORS"]].sum()
+    votes_df = total_voters.join(total_electors)
+    votes_df["VOTER TURNOUT"] = round(votes_df["TOTAL VOTES"] / votes_df["TOTAL ELECTORS"] * 100, 2)
+
+    # Highest and lowest voter turnout for constituencies
+    const_turnout = votes_df.sort_values(by="VOTER TURNOUT", ascending=False)
+    high_consts = const_turnout.head(10)
+    low_consts = const_turnout.tail(10)
+
+    # Highest and lowest voter turnout for states
+    states_df = votes_df.groupby("STATE").sum().drop(["VOTER TURNOUT"], axis=1)
+    states_df["VOTER TURNOUT"] = round(states_df["TOTAL VOTES"] / states_df["TOTAL ELECTORS"] * 100, 2)
+    states_turnout = states_df.sort_values(by="VOTER TURNOUT", ascending=False)
+    high_stat = states_turnout.head(10)
+    low_stat = states_turnout.tail(10)
+
+    # Plotting
+    fig, axes = plt.subplots(2, 2, figsize=(22, 14))
+    axes[0][0].plot(high_stat.index[::-1], high_stat["VOTER TURNOUT"][::-1], 'b-o', linewidth=2, markersize=10)
+    axes[0][0].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=15)
+    axes[0][0].set_title("STATES/UTs WITH HIGHEST VOTER TURNOUT")
+    axes[0][0].grid(linewidth=2)
+
+    axes[0][1].plot(low_stat.index, low_stat["VOTER TURNOUT"], 'r-o', linewidth=2, markersize=10)
+    axes[0][1].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=15)
+    axes[0][1].set_title("STATES/UTs WITH LOWEST VOTER TURNOUT")
+    axes[0][1].grid(linewidth=2)
+
+    axes[1][0].plot(high_consts.index[::-1], high_consts["VOTER TURNOUT"][::-1], 'g-o', linewidth=2, markersize=10)
+    axes[1][0].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=20)
+    axes[1][0].set_title("CONSTITUENCIES WITH HIGHEST VOTER TURNOUT")
+    axes[1][0].grid(linewidth=2)
+
+    axes[1][1].plot(low_consts.index, low_consts["VOTER TURNOUT"], 'm-o', linewidth=2, markersize=10)
+    axes[1][1].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=15)
+    axes[1][1].set_title("CONSTITUENCIES WITH LOWEST VOTER TURNOUT")
+    axes[1][1].grid(linewidth=2)
+
+    st.pyplot(fig)
