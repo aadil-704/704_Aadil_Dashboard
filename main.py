@@ -4,10 +4,11 @@ import streamlit as st
 
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
-tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis","The Number of Constituencies from each State","Constituency vs Statewise participation for the most contesting Political Parties","Seats Won by Party in Each State","The number of seats contest by a party","The number of seats winning by party","Youngest Winners","Oldest Winners and their Details","Winning Candidates Educational Degree","Top 10 Individuals with the Most Criminal Cases","Top 10 Individuals with the Highest Assets","Participation vs Win Counts for the Category in Politics","Age Distribution of Winning Politicians by Gender"))
+st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
     st.subheader("Graph")
+    st.write("The Number of Constituencies from each State")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
@@ -56,8 +57,6 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
-   
-    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
@@ -109,63 +108,28 @@ if tab_selector == "Graph":
     # Plot the scatter plot
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
-   
-
-    # Filter and count overall category
-    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
-    cat_overall.columns = ['CATEGORY', 'Counts']
-    cat_overall['Category'] = 'Overall Category Counts'
-
-    # Filter and count winning category
-    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
-    cat_winner.columns = ['CATEGORY', 'Counts']
-    cat_winner['Category'] = 'Winning Category Ratio'
-
-    # Concatenate overall and winning category counts
-    cat_overl_win = pd.concat([cat_winner, cat_overall])
-
-    # Plot the bar chart
-    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
-    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
-    st.plotly_chart(fig)
-
-    # Filter to include only winning politicians
-    winners = df[df['WINNER'] == 1]
-
-    # Define the age ranges or bins for the histogram
-    age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
-
-    # Create a histogram of age distribution for winning politicians with color based on gender
-    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
-
-    # Update the layout
-    fig.update_layout(xaxis_title="Age",
-                  yaxis_title="Count",
-                  title_text='Age Distribution of Winning Politicians by Gender',
-                  template='plotly_dark')
-
-    # Show the figure
-    st.plotly_chart(fig)
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
-    df = pd.read_csv("data.csv")
-    df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
+    selected_tab = st.sidebar.radio("Select Tab", ("The Number of Constituencies from each State", "Constituency vs Statewise participation for the most contesting Political Parties", "Seats Won by Party in Each State", "The number of seats contest by a party", "The number of seats winning by party", "Youngest Winners", "Oldest Winners and their Details", "Winning Candidates Educational Degree", "Top 10 Individuals with the Most Criminal Cases", "Top 10 Individuals with the Highest Assets", "Participation vs Win Counts for the Category in Politics", "Age Distribution of Winning Politicians by Gender"))
 
-    a = df.STATE.unique()
+    if selected_tab == "The Number of Constituencies from each State":
+        st.write("The Number of Constituencies from each State")
+        df = pd.read_csv("data.csv")
+        df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
-    option = st.sidebar.selectbox('Select State ', a)
-    df1 = df[(df['STATE'] == option)]
+        num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
+        fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
-    b = df1.CONSTITUENCY.unique()
-    option2 = st.sidebar.selectbox('Select Constituency ', b)
+        # Plotting the bar chart for each state
+        st.plotly_chart(fig_num_cons)
 
-    df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
-    st.write(df2)
+    elif selected_tab == "Constituency vs Statewise participation for the most contesting Political Parties":
+        st.write("Constituency vs Statewise participation for the most contesting Political Parties")
+        # Add your code here for this section
 
-    # Add a graph here based on the filtered data
-    if not df2.empty:
-        # Plot a graph based on the selected state and constituency
-        party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
-        fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
-        st.plotly_chart(fig_party_votes)
+    elif selected_tab == "Seats Won by Party in Each State":
+        st.write("Seats Won by Party in Each State")
+        # Add your code here for this section
+
+    # Continue adding similar elif blocks for each tab option
