@@ -4,9 +4,9 @@ import streamlit as st
 
 # Streamlit UI
 st.header("General Elections In India 2019")
-tab_selector = st.sidebar.radio("Select Tab", ("Analysis", "Graphical Visualization"))
+tab_selector = st.sidebar.radio("Select Tab", ("Contestant Analysis", "Graphical Visualization"))
 
-if tab_selector == "Analysis":
+if tab_selector == "Contestant Analysis":
    
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
