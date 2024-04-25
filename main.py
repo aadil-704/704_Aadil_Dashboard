@@ -154,6 +154,10 @@ elif tab_selector == "Analysis":
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
+    # Calculate the distribution of seats contested by each party
+    party = df['PARTY'].value_counts().reset_index().head(10)
+    party.columns = ['PARTY', 'COUNT']
+
     a = df.STATE.unique()
 
     option = st.sidebar.selectbox('Select State ', a)
