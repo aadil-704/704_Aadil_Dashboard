@@ -84,68 +84,6 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_winner_education)
 
-    # Convert 'Criminal' column to numeric
-    df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
-    df['Criminal'] = df['Criminal'].fillna(0)
-
-    individual_criminal_cases = df.groupby('NAME')['Criminal'].sum().reset_index()
-    individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
-
-    fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases', template='plotly_dark')
-    st.plotly_chart(fig_individual_criminal_cases)
-
-    # Clean up 'ASSETS' column and convert to integer
-    df['ASSETS'] = df['ASSETS'].str.replace(',', '')  # Remove commas from numbers
-    df['ASSETS'] = df['ASSETS'].str.extract(r'([\d.]+)').astype(float)  # Convert to float
-    df['ASSETS'] = df['ASSETS'].fillna(0)  # Fill missing values with 0
-    df['ASSETS'] = df['ASSETS'].astype(int)  # Convert to integer
-
-    # Remove missing or invalid values from 'ASSETS' column
-    df = df[df['ASSETS'].notna()]
-
-    # Group by individual's name and find the maximum assets, party, state, and constituency for each individual
-    individual_assets = df.groupby('NAME').agg({'ASSETS': 'max', 'PARTY': 'first', 'STATE': 'first', 'CONSTITUENCY': 'first'}).reset_index()
-
-    # Sort by count of assets in descending order and select top 10
-    individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
-
-    # Plot the scatter plot
-    fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
-    st.plotly_chart(fig_individual_assets)
-
-    # Filter and count overall category
-    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
-    cat_overall.columns = ['CATEGORY', 'Counts']
-    cat_overall['Category'] = 'Overall Category Counts'
-
-    # Filter and count winning category
-    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
-    cat_winner.columns = ['CATEGORY', 'Counts']
-    cat_winner['Category'] = 'Winning Category Ratio'
-
-    # Concatenate overall and winning category counts
-    cat_overl_win = pd.concat([cat_winner, cat_overall])
-
-    # Plot the bar chart
-    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
-    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
-    st.plotly_chart(fig)
-
-    # Define the age ranges or bins for the histogram
-    age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
-
-    # Create a histogram of age distribution for winning politicians with color based on gender
-    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
-
-    # Update the layout
-    fig.update_layout(xaxis_title="Age",
-                      yaxis_title="Count",
-                      title_text='Age Distribution of Winning Politicians by Gender',
-                      template='plotly_dark')
-
-    # Show the figure
-    st.plotly_chart(fig)
-
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
     # Your analysis tab code here
@@ -167,13 +105,18 @@ elif tab_selector == "Analysis":
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
 
-        # Age and gender selection
-        age_range = st.sidebar.slider("Select Age Range", min_value=20, max_value=100, value=(20, 40), step=1)
-        gender = st.sidebar.radio("Select Gender", ["Male", "Female"])
+    # Display winning candidates for the selected state and constituency
+    st.subheader("Winning Candidates")
+    winners_filter = winners[(winners['STATE'] == option) & (winners['CONSTITUENCY'] == option2)]
+    st.write(winners_filter[['NAME', 'PARTY', 'AGE', 'GENDER']])
 
-        # Filter winners based on selected age range and gender
-        filtered_winners = winners[(winners['AGE'] >= age_range[0]) & (winners['AGE'] <= age_range[1]) & (winners['GENDER'] == gender)]
+    # Age and gender selection
+    age_range = st.sidebar.slider("Select Age Range", min_value=20, max_value=100, value=(20, 40), step=1)
+    gender = st.sidebar.radio("Select Gender", ["Male", "Female"])
 
-        # Display the filtered winners
-        st.subheader("Winning Candidates")
-        st.write(filtered_winners[['NAME', 'PARTY', 'CONSTITUENCY', 'STATE']])
+    # Filter winners based on selected age range and gender
+    filtered_winners = winners[(winners['AGE'] >= age_range[0]) & (winners['AGE'] <= age_range[1]) & (winners['GENDER'] == gender)]
+
+    # Display the filtered winners
+    st.subheader("Filtered Winning Candidates")
+    st.write(filtered_winners[['NAME', 'PARTY', 'AGE', 'GENDER']])
