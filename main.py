@@ -61,7 +61,7 @@ elif tab_selector == "Graph":
    
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
-    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
+    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
     st.plotly_chart(fig)
 
     # Filter the DataFrame to include only winners
