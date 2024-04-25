@@ -84,7 +84,7 @@ if tab_selector == "Graph":
                                       color='EDUCATION',  # Change to color='PARTY' for coloring by party
                                       title='Winning Candidates Educational Degree', 
                                       template='plotly_dark',
-                                      hover_data={'EDUCATION': False, 'COUNT': True})  # Remove 'PARTY', 'STATE', and 'CONSTITUENCY' from hover data
+                                      hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY':True})  # Remove 'PARTY', 'STATE', and 'CONSTITUENCY' from hover data
         st.plotly_chart(fig_winner_education)
     except Exception as e:
         st.error(f"Error: {e}")
