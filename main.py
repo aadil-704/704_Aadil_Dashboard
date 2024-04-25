@@ -11,38 +11,6 @@ if tab_selector == "Graph":
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
-     # Calculate voter turnout for each state
-    state_voter_turnout = df.groupby('STATE')['Total_votes'].sum() / df.groupby('STATE')['Total_votes'].count()
-    state_voter_turnout = state_voter_turnout.reset_index(name='Voter_Turnout').sort_values(by='Voter_Turnout', ascending=False)
-    highest_turnout_state = state_voter_turnout.iloc[0]['STATE']
-    lowest_turnout_state = state_voter_turnout.iloc[-1]['STATE']
-
-    # Plotting the bar chart for states with voter turnout
-    fig_state_voter_turnout = px.bar(state_voter_turnout, x='STATE', y='Voter_Turnout', color='STATE', title='Voter Turnout by State', template='plotly_dark')
-
-    # Show the figure
-    st.plotly_chart(fig_state_voter_turnout)
-
-    # Similarly, calculate voter turnout for each constituency
-    constituency_voter_turnout = df.groupby(['STATE', 'CONSTITUENCY'])['Total_votes'].sum() / df.groupby(['STATE', 'CONSTITUENCY'])['Total_votes'].count()
-    constituency_voter_turnout = constituency_voter_turnout.reset_index(name='Voter_Turnout').sort_values(by='Voter_Turnout', ascending=False)
-    highest_turnout_constituency = constituency_voter_turnout.iloc[0][['STATE', 'CONSTITUENCY']]
-    lowest_turnout_constituency = constituency_voter_turnout.iloc[-1][['STATE', 'CONSTITUENCY']]
-
-    # Plotting the bar chart for constituencies with voter turnout
-    fig_constituency_voter_turnout = px.bar(constituency_voter_turnout, x='CONSTITUENCY', y='Voter_Turnout', color='STATE', title='Voter Turnout by Constituency', template='plotly_dark')
-
-    # Show the figure
-    st.plotly_chart(fig_constituency_voter_turnout)
-
-    st.write(f"Highest Voter Turnout State: {highest_turnout_state}")
-    st.write(f"Lowest Voter Turnout State: {lowest_turnout_state}")
-    st.write(f"Highest Voter Turnout Constituency: {highest_turnout_constituency['CONSTITUENCY']} in {highest_turnout_constituency['STATE']}")
-    st.write(f"Lowest Voter Turnout Constituency: {lowest_turnout_constituency['CONSTITUENCY']} in {lowest_turnout_constituency['STATE']}")
-    
-    
-    
-    
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
