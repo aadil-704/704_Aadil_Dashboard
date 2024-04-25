@@ -4,7 +4,7 @@ import streamlit as st
 
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
-tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
+tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis","The Number of Constituencies from each State","Constituency vs Statewise participation for the most contesting Political Parties","Seats Won by Party in Each State","The number of seats contest by a party","The number of seats winning by party","Youngest Winners","Oldest Winners and their Details","Winning Candidates Educational Degree","Top 10 Individuals with the Most Criminal Cases","Top 10 Individuals with the Highest Assets","Participation vs Win Counts for the Category in Politics","Age Distribution of Winning Politicians by Gender"))
 
 if tab_selector == "Graph":
     st.subheader("Graph")
