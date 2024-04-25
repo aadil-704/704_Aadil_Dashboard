@@ -72,10 +72,16 @@ if tab_selector == "Graph":
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
 
+    # Filter the DataFrame to include only winners and select the top 10 youngest winners
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
-    fig_young_winner = px.bar(young_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Youngest Winners', template='plotly_dark')
 
-    st.plotly_chart(fig_young_winner)
+    # Create a treemap chart
+    fig_young_winner_treemap = px.treemap(young_winner, path=['PARTY', 'NAME'], values='AGE',
+                                      color='AGE', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'],
+                                      title='Top 10 Youngest Winners', template='plotly_dark')
+
+    # Display the treemap chart
+    st.plotly_chart(fig_young_winner_treemap)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
     fig_old_winner = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:', template='plotly_dark')
