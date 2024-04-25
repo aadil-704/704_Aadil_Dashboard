@@ -73,21 +73,13 @@ if tab_selector == "Graph":
     st.plotly_chart(fig_old_winner)
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
-    try:
-        winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
-        winner_education.columns = ['EDUCATION', 'COUNT']
+    winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
+    winner_education.columns = ['EDUCATION', 'COUNT']
 
-        # Plot the bar chart for winning candidates' educational degrees
-        fig_winner_education = px.bar(winner_education, 
-                                      x='EDUCATION', 
-                                      y='COUNT', 
-                                      color='EDUCATION',  # Change to color='PARTY' for coloring by party
-                                      title='Winning Candidates Educational Degree', 
-                                      template='plotly_dark',
-                                      hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY':True})  # Remove 'PARTY', 'STATE', and 'CONSTITUENCY' from hover data
-        st.plotly_chart(fig_winner_education)
-    except Exception as e:
-        st.error(f"Error: {e}")
+    # Plot the bar chart for winning candidates' educational degrees
+    fig_winner_education = px.bar(winner_education, x='EDUCATION', y='COUNT', color='EDUCATION', title='Winning Candidates Educational Degree', template='plotly_dark')
+
+    st.plotly_chart(fig_winner_education)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
@@ -148,9 +140,9 @@ if tab_selector == "Graph":
 
     # Update the layout
     fig.update_layout(xaxis_title="Age",
-                      yaxis_title="Count",
-                      title_text='Age Distribution of Winning Politicians by Gender',
-                      template='plotly_dark')
+                  yaxis_title="Count",
+                  title_text='Age Distribution of Winning Politicians by Gender',
+                  template='plotly_dark')
 
     # Show the figure
     st.plotly_chart(fig)
