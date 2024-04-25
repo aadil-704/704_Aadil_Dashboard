@@ -58,27 +58,11 @@ elif tab_selector == "Graph":
     fig_seats_won = px.bar(seats_won_by_party_in_state, x='STATE', y='SEATS_WON', color='PARTY', title='Seats Won by Party in Each State', template='plotly_dark')
 
     st.plotly_chart(fig_seats_won)
-
-    # Count the number of seats contested by each party
-    party_counts = df['PARTY'].value_counts().reset_index()
-
-    # Determine the threshold for grouping small parties into 'Others'
-    threshold = 10
-
-    # Aggregate small parties into 'Others' if they have less than the threshold number of seats
-    small_parties = party_counts[party_counts['PARTY'] < threshold]
-    others_count = small_parties['PARTY'].sum()
-    party_counts = party_counts[party_counts['PARTY'] >= threshold]
-    party_counts = party_counts.append({'index': 'Others', 'PARTY': others_count}, ignore_index=True)
-
-    # Rename columns
-    party_counts.columns = ['PARTY', 'COUNT']
-
-    # Create the pie chart
-    fig_party_pie = px.pie(party_counts, values='COUNT', names='PARTY', title='Distribution of seats by party (Top parties)', template='plotly_dark')
-
-    # Display the pie chart
-    st.plotly_chart(fig_party_pie)
+   
+    party = df['PARTY'].value_counts().reset_index().head(10)
+    party.columns = ['PARTY', 'COUNT']
+    fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
+    st.plotly_chart(fig)
 
     df_winners = df[df['WINNER'] == 1]
     winner = df_winners['PARTY'].value_counts().reset_index().head(10)
