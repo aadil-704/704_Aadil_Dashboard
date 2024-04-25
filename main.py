@@ -35,12 +35,15 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_seats_won)
 
+    # Filter out specific parties
+    filtered_df = df[~df['PARTY'].isin(["NOTA", "IND", "NTK", "VBA (M)"])]
+
     # Count the number of seats contested by each party
-    contest_counts = df['PARTY'].value_counts().head(10).reset_index()
+    contest_counts = filtered_df['PARTY'].value_counts().head(10).reset_index()
     contest_counts.columns = ['PARTY', 'Contest_Count']
 
     # Count the number of seats won by each party
-    win_counts = df[df['WINNER'] == 1]['PARTY'].value_counts().head(10).reset_index()
+    win_counts = filtered_df[filtered_df['WINNER'] == 1]['PARTY'].value_counts().head(10).reset_index()
     win_counts.columns = ['PARTY', 'Win_Count']
 
     # Merge contest and win counts
