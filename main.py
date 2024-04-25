@@ -84,7 +84,6 @@ if tab_selector == "Graph":
                                   title='Winning Candidates Educational Degree', 
                                   template='plotly_dark',
                                   hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY': True, 'STATE': True, 'CONSTITUENCY': True})  # Add hover data for count only
-
     st.plotly_chart(fig_winner_education)
 
     # Convert 'Criminal' column to numeric
