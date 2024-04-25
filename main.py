@@ -78,14 +78,14 @@ if tab_selector == "Graph":
 
     # Plot the bar chart for winning candidates' educational degrees
     fig_winner_education = px.bar(winner_education, 
-                              x='EDUCATION', 
-                              y='COUNT', 
-                              color='EDUCATION',  # Change to color='PARTY' for coloring by party
-                              title='Winning Candidates Educational Degree', 
-                              template='plotly_dark',
-                              hover_data={'EDUCATION': False, 'COUNT': True})  # Add hover data for count only
+                                  x='EDUCATION', 
+                                  y='COUNT', 
+                                  color='EDUCATION',  # Change to color='PARTY' for coloring by party
+                                  title='Winning Candidates Educational Degree', 
+                                  template='plotly_dark',
+                                  hover_data={'EDUCATION': False, 'COUNT': True})  # Add hover data for count only
 
-     st.plotly_chart(fig_winner_education)
+    st.plotly_chart(fig_winner_education)
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
@@ -146,9 +146,9 @@ if tab_selector == "Graph":
 
     # Update the layout
     fig.update_layout(xaxis_title="Age",
-                  yaxis_title="Count",
-                  title_text='Age Distribution of Winning Politicians by Gender',
-                  template='plotly_dark')
+                      yaxis_title="Count",
+                      title_text='Age Distribution of Winning Politicians by Gender',
+                      template='plotly_dark')
 
     # Show the figure
     st.plotly_chart(fig)
