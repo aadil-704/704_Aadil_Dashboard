@@ -2,15 +2,20 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+# Read the data
+df = pd.read_csv("data.csv")
+df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
+
+# Filter to include only winning politicians
+winners = df[df['WINNER'] == 1]
+
 # Streamlit UI
 st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
     st.subheader("Graph")
-    df = pd.read_csv("data.csv")
-    df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
-    
+    # Your graph tab code here
     num_cons = df.groupby('STATE')['CONSTITUENCY'].nunique().sort_values(ascending=False).reset_index()
     fig_num_cons = px.bar(num_cons, y='CONSTITUENCY', x='STATE', color='STATE', title='The Number of Constituencies from each State', template='plotly_dark')
 
@@ -146,9 +151,7 @@ if tab_selector == "Graph":
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
-    df = pd.read_csv("data.csv")
-    df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
-
+    # Your analysis tab code here
     a = df.STATE.unique()
 
     option = st.sidebar.selectbox('Select State ', a)
