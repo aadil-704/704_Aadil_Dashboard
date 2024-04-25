@@ -73,22 +73,25 @@ if tab_selector == "Graph":
     st.plotly_chart(fig_old_winner)
 
     df_winners = df[df['WINNER'] == 1]  # Filter winners
-    winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
-    winner_education.columns = ['EDUCATION', 'COUNT']
+    try:
+        winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
+        winner_education.columns = ['EDUCATION', 'COUNT']
 
-    # Print the winner_education DataFrame to inspect its structure
-    print("Winner Education DataFrame:")
-    print(winner_education)
+        # Print the winner_education DataFrame to inspect its structure
+        print("Winner Education DataFrame:")
+        print(winner_education)
 
-    # Plot the bar chart for winning candidates' educational degrees
-    fig_winner_education = px.bar(winner_education, 
-                                  x='EDUCATION', 
-                                  y='COUNT', 
-                                  color='EDUCATION',  # Change to color='PARTY' for coloring by party
-                                  title='Winning Candidates Educational Degree', 
-                                  template='plotly_dark',
-                                  hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY': True, 'STATE': True, 'CONSTITUENCY': True})  # Add hover data for count only
-    st.plotly_chart(fig_winner_education)
+        # Plot the bar chart for winning candidates' educational degrees
+        fig_winner_education = px.bar(winner_education, 
+                                      x='EDUCATION', 
+                                      y='COUNT', 
+                                      color='EDUCATION',  # Change to color='PARTY' for coloring by party
+                                      title='Winning Candidates Educational Degree', 
+                                      template='plotly_dark',
+                                      hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY': True, 'STATE': True, 'CONSTITUENCY': True})  # Add hover data for count only
+        st.plotly_chart(fig_winner_education)
+    except Exception as e:
+        st.error(f"Error: {e}")
 
     # Convert 'Criminal' column to numeric
     df['Criminal'] = pd.to_numeric(df['Criminal'], errors='coerce')
