@@ -64,12 +64,21 @@ elif tab_selector == "Graph":
     fig = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party')
     st.plotly_chart(fig)
 
+    # Filter the DataFrame to include only winners
     df_winners = df[df['WINNER'] == 1]
-    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
-    winner.columns = ['PARTY', 'COUNT']
-    fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party', template='plotly_dark')
 
-    st.plotly_chart(fig_winner)
+    # Count the number of seats won by each party
+    winner_counts = df_winners['PARTY'].value_counts().reset_index().head(10)
+
+    # Rename columns
+    winner_counts.columns = ['PARTY', 'COUNT']
+
+    # Create the donut chart
+    fig_winner_donut = px.pie(winner_counts, values='COUNT', names='PARTY', title='Seats won by party (Top winners)',
+                          template='plotly_dark', hole=0.5)  # Set hole parameter to create a donut shape
+
+    # Display the donut chart
+    st.plotly_chart(fig_winner_donut)
 
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
