@@ -56,6 +56,8 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
+   
+    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
@@ -107,6 +109,43 @@ if tab_selector == "Graph":
     # Plot the scatter plot
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
+   
+
+    # Filter and count overall category
+    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
+    cat_overall.columns = ['CATEGORY', 'Counts']
+    cat_overall['Category'] = 'Overall Category Counts'
+
+    # Filter and count winning category
+    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
+    cat_winner.columns = ['CATEGORY', 'Counts']
+    cat_winner['Category'] = 'Winning Category Ratio'
+
+    # Concatenate overall and winning category counts
+    cat_overl_win = pd.concat([cat_winner, cat_overall])
+
+    # Plot the bar chart
+    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
+    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
+    st.plotly_chart(fig)
+
+    # Filter to include only winning politicians
+    winners = df[df['WINNER'] == 1]
+
+    # Define the age ranges or bins for the histogram
+    age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+    # Create a histogram of age distribution for winning politicians with color based on gender
+    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
+
+    # Update the layout
+    fig.update_layout(xaxis_title="Age",
+                  yaxis_title="Count",
+                  title_text='Age Distribution of Winning Politicians by Gender',
+                  template='plotly_dark')
+
+    # Show the figure
+    st.plotly_chart(fig)
 
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
@@ -130,45 +169,3 @@ elif tab_selector == "Analysis":
         party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
-
-        # Calculate voter turnout for constituencies and states
-        total_voters = df.groupby(["STATE", "CONSTITUENCY"])[["TOTAL VOTES"]].sum()
-        total_electors = df.groupby(["STATE", "CONSTITUENCY"])[["TOTAL ELECTORS"]].sum()
-        votes_df = total_voters.join(total_electors)
-        votes_df["VOTER TURNOUT"] = round(votes_df["TOTAL VOTES"] / votes_df["TOTAL ELECTORS"] * 100, 2)
-
-        # Highest and lowest voter turnout for constituencies
-        const_turnout = votes_df.sort_values(by="VOTER TURNOUT", ascending=False)
-        high_consts = const_turnout.head(10)
-        low_consts = const_turnout.tail(10)
-
-        # Highest and lowest voter turnout for states
-        states_df = votes_df.groupby("STATE").sum().drop(["VOTER TURNOUT"], axis=1)
-        states_df["VOTER TURNOUT"] = round(states_df["TOTAL VOTES"] / states_df["TOTAL ELECTORS"] * 100, 2)
-        states_turnout = states_df.sort_values(by="VOTER TURNOUT", ascending=False)
-        high_stat = states_turnout.head(10)
-        low_stat = states_turnout.tail(10)
-
-        # Plotting
-        fig, axes = plt.subplots(2, 2, figsize=(22, 14))
-        axes[0][0].plot(high_stat.index[::-1], high_stat["VOTER TURNOUT"][::-1], 'b-o', linewidth=2, markersize=10)
-        axes[0][0].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=15)
-        axes[0][0].set_title("STATES/UTs WITH HIGHEST VOTER TURNOUT")
-        axes[0][0].grid(linewidth=2)
-
-        axes[0][1].plot(low_stat.index, low_stat["VOTER TURNOUT"], 'r-o', linewidth=2, markersize=10)
-        axes[0][1].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=15)
-        axes[0][1].set_title("STATES/UTs WITH LOWEST VOTER TURNOUT")
-        axes[0][1].grid(linewidth=2)
-
-        axes[1][0].plot(high_consts.index[::-1], high_consts["VOTER TURNOUT"][::-1], 'g-o', linewidth=2, markersize=10)
-        axes[1][0].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=20)
-        axes[1][0].set_title("CONSTITUENCIES WITH HIGHEST VOTER TURNOUT")
-        axes[1][0].grid(linewidth=2)
-
-        axes[1][1].plot(low_consts.index, low_consts["VOTER TURNOUT"], 'm-o', linewidth=2, markersize=10)
-        axes[1][1].set_ylabel("VOTER TURNOUT\n (in %)", labelpad=15)
-        axes[1][1].set_title("CONSTITUENCIES WITH LOWEST VOTER TURNOUT")
-        axes[1][1].grid(linewidth=2)
-
-        st.pyplot(fig)
