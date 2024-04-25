@@ -35,7 +35,7 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_seats_won)
 
-    # Count the number of seats contested by each party
+   # Count the number of seats contested by each party
     party_contest = df['PARTY'].value_counts().reset_index().head(10)
     party_contest.columns = ['PARTY', 'CONTEST_COUNT']
 
@@ -56,7 +56,7 @@ if tab_selector == "Graph":
 
     # Display the combined bar chart
     st.plotly_chart(fig_combined)
-
+    
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
 
