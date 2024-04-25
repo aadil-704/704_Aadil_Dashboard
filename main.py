@@ -1,12 +1,4 @@
-import pandas as pd
-import plotly.express as px
-import streamlit as st
-
-# Streamlit UI
-st.sidebar.header("General Elections In India 2019")
-tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
-
-if tab_selector == "Graph":
+elif tab_selector == "Graph":
     st.subheader("Graph")
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
@@ -75,16 +67,13 @@ if tab_selector == "Graph":
     # Filter the DataFrame to include only winners and select the top 10 youngest winners
     young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
 
-   # Filter the DataFrame to include only winners and select the top 10 youngest winners
-   young_winner = df[df['WINNER'] == 1].sort_values('AGE').head(10)
-
-   # Create a bubble chart
-   fig_young_winner_bubble = px.scatter(young_winner, x='NAME', y='AGE', color='PARTY', size='AGE',
+    # Create a bubble chart
+    fig_young_winner_bubble = px.scatter(young_winner, x='NAME', y='AGE', color='PARTY', size='AGE',
                                      hover_data=['PARTY', 'STATE', 'CONSTITUENCY'],
                                      title='Top 10 Youngest Winners', template='plotly_dark')
 
-   # Display the bubble chart
-   st.plotly_chart(fig_young_winner_bubble)
+    # Display the bubble chart
+    st.plotly_chart(fig_young_winner_bubble)
 
     old_winner = df[df['WINNER'] == 1].sort_values('AGE', ascending=False).head(10)
     fig_old_winner = px.bar(old_winner, x='NAME', y='AGE', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Oldest Winners and their Details:', template='plotly_dark')
@@ -128,63 +117,3 @@ if tab_selector == "Graph":
     # Plot the scatter plot
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
-   
-
-    # Filter and count overall category
-    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
-    cat_overall.columns = ['CATEGORY', 'Counts']
-    cat_overall['Category'] = 'Overall Category Counts'
-
-    # Filter and count winning category
-    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
-    cat_winner.columns = ['CATEGORY', 'Counts']
-    cat_winner['Category'] = 'Winning Category Ratio'
-
-    # Concatenate overall and winning category counts
-    cat_overl_win = pd.concat([cat_winner, cat_overall])
-
-    # Plot the bar chart
-    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
-    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
-    st.plotly_chart(fig)
-
-    # Filter to include only winning politicians
-    winners = df[df['WINNER'] == 1]
-
-    # Define the age ranges or bins for the histogram
-    age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
-
-    # Create a histogram of age distribution for winning politicians with color based on gender
-    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
-
-    # Update the layout
-    fig.update_layout(xaxis_title="Age",
-                  yaxis_title="Count",
-                  title_text='Age Distribution of Winning Politicians by Gender',
-                  template='plotly_dark')
-
-    # Show the figure
-    st.plotly_chart(fig)
-
-elif tab_selector == "Analysis":
-    st.subheader("Analysis")
-    df = pd.read_csv("data.csv")
-    df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
-
-    a = df.STATE.unique()
-
-    option = st.sidebar.selectbox('Select State ', a)
-    df1 = df[(df['STATE'] == option)]
-
-    b = df1.CONSTITUENCY.unique()
-    option2 = st.sidebar.selectbox('Select Constituency ', b)
-
-    df2 = df1[(df1['STATE'] == option) & (df1['CONSTITUENCY'] == option2)]
-    st.write(df2)
-
-    # Add a graph here based on the filtered data
-    if not df2.empty:
-        # Plot a graph based on the selected state and constituency
-        party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
-        fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
-        st.plotly_chart(fig_party_votes)
