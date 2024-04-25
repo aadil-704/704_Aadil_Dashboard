@@ -170,23 +170,22 @@ elif tab_selector == "Analysis":
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
     
-    # Distribution of assets, liabilities, and net worth
-    st.subheader("Distribution of Assets, Liabilities, and Net Worth")
+    # Distribution of assets and liabilities
+    st.subheader("Distribution of Assets and Liabilities")
     
     # Check if required columns exist in the DataFrame
-    if 'ASSETS' in df.columns and 'LIABILITIES' in df.columns and 'NET\nWORTH' in df.columns:
-        # Display assets, liabilities, and net worth
-        st.write("Assets, Liabilities, and Net Worth of the elected MPs:")
-        st.write(df[['ASSETS', 'LIABILITIES', 'NET\nWORTH']])
+    if 'ASSETS' in df.columns and 'LIABILITIES' in df.columns:
+        # Display assets and liabilities
+        st.write("Assets and Liabilities of the elected MPs:")
+        st.write(df[['ASSETS', 'LIABILITIES']])
 
         # Visualize distribution using histograms
         fig_assets = px.histogram(df, x="ASSETS", title="Distribution of Assets", template='plotly_dark')
         fig_liabilities = px.histogram(df, x="LIABILITIES", title="Distribution of Liabilities", template='plotly_dark')
-        fig_net_worth = px.histogram(df, x="NET\nWORTH", title="Distribution of Net Worth", template='plotly_dark')
 
         # Show the figures
         st.plotly_chart(fig_assets)
         st.plotly_chart(fig_liabilities)
-        st.plotly_chart(fig_net_worth)
     else:
-        st.write("One or more required columns (ASSETS, LIABILITIES, NET\nWORTH) are missing in the DataFrame.")
+        st.write("One or more required columns (ASSETS, LIABILITIES) are missing in the DataFrame.")
+
