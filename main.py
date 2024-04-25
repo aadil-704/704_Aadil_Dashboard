@@ -1,5 +1,4 @@
 import pandas as pd
-import plotly.express as px
 import streamlit as st
 
 # Read the data
@@ -130,9 +129,6 @@ if tab_selector == "Graph":
     fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
     st.plotly_chart(fig)
-
-    # Filter to include only winning politicians
-    winners = df[df['WINNER'] == 1]
 
     # Define the age ranges or bins for the histogram
     age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
