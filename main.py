@@ -3,11 +3,11 @@ import plotly.express as px
 import streamlit as st
 
 # Streamlit UI
-st.sidebar.header("General Elections In India 2019")
+st.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
-    st.subheader("Graph")
+  
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
     
@@ -148,7 +148,7 @@ if tab_selector == "Graph":
     st.plotly_chart(fig)
 
 elif tab_selector == "Analysis":
-    st.subheader("Analysis")
+   
     df = pd.read_csv("data.csv")
     df = df.rename(columns={"CRIMINAL\nCASES": "Criminal", "GENERAL\nVOTES": "General_votes", "POSTAL\nVOTES": "Postal_votes", "TOTAL\nVOTES": "Total_votes"})
 
