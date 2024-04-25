@@ -169,3 +169,19 @@ elif tab_selector == "Analysis":
         party_votes = df2.groupby('PARTY')['Total_votes'].sum().reset_index()
         fig_party_votes = px.bar(party_votes, x='PARTY', y='Total_votes', color='PARTY', title=f'Total Votes for Each Party in {option2}, {option}', template='plotly_dark')
         st.plotly_chart(fig_party_votes)
+    
+    # Distribution of assets, liabilities, and net worth
+    st.subheader("Distribution of Assets, Liabilities, and Net Worth")
+    st.write("Assets, Liabilities, and Net Worth of the elected MPs:")
+    st.write(df[['ASSETS', 'LIABILITIES', 'NET\nWORTH']])
+
+    # Visualize distribution using histograms
+    fig_assets = px.histogram(df, x="ASSETS", title="Distribution of Assets", template='plotly_dark')
+    fig_liabilities = px.histogram(df, x="LIABILITIES", title="Distribution of Liabilities", template='plotly_dark')
+    fig_net_worth = px.histogram(df, x="NET\nWORTH", title="Distribution of Net Worth", template='plotly_dark')
+
+    # Show the figures
+    st.plotly_chart(fig_assets)
+    st.plotly_chart(fig_liabilities)
+    st.plotly_chart(fig_net_worth)
+
