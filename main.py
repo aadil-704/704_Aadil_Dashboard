@@ -113,42 +113,6 @@ if tab_selector == "Graph":
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
 
-    # Filter and count overall category
-    cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
-    cat_overall.columns = ['CATEGORY', 'Counts']
-    cat_overall['Category'] = 'Overall Category Counts'
-
-    # Filter and count winning category
-    cat_winner = vote[vote['WINNER'] == 1]['CATEGORY'].value_counts().reset_index()
-    cat_winner.columns = ['CATEGORY', 'Counts']
-    cat_winner['Category'] = 'Winning Category Ratio'
-
-    # Concatenate overall and winning category counts
-    cat_overl_win = pd.concat([cat_winner, cat_overall])
-
-    # Plot the bar chart
-    fig = px.bar(cat_overl_win, x='CATEGORY', y='Counts', color='Category', barmode='group')
-    fig.update_layout(title_text='Participation vs Win Counts for the Category in Politics', template='plotly_dark')
-    st.plotly_chart(fig)
-
-    # Filter to include only winning politicians
-    winners = df[df['WINNER'] == 1]
-
-    # Define the age ranges or bins for the histogram
-    age_bins = [20, 30, 40, 50, 60, 70, 80, 90, 100]
-
-    # Create a histogram of age distribution for winning politicians with color based on gender
-    fig = px.histogram(winners, x="AGE", nbins=len(age_bins), color="GENDER", title='Age Distribution of Winning Politicians by Gender', template='plotly_dark')
-
-    # Update the layout
-    fig.update_layout(xaxis_title="Age",
-                      yaxis_title="Count",
-                      title_text='Age Distribution of Winning Politicians by Gender',
-                      template='plotly_dark')
-
-    # Show the figure
-    st.plotly_chart(fig)
-
 elif tab_selector == "Analysis":
     st.subheader("Analysis")
     # Your analysis tab code here
@@ -173,6 +137,11 @@ elif tab_selector == "Analysis":
         # Age and gender selection
         age_range = st.sidebar.slider("Select Age Range", min_value=20, max_value=100, value=(20, 40), step=1)
         gender = st.sidebar.radio("Select Gender", ["Male", "Female"])
+
+        # Debugging statements
+        print("Winners DataFrame columns:", winners.columns)
+        print("Age Range:", age_range)
+        print("Selected Gender:", gender)
 
         # Filter winners based on selected age range and gender
         filtered_winners = winners[(winners['AGE'] >= age_range[0]) & (winners['AGE'] <= age_range[1]) & (winners['GENDER'] == gender)]
