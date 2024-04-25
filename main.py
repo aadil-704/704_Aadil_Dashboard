@@ -76,6 +76,10 @@ if tab_selector == "Graph":
     winner_education = df_winners['EDUCATION'].value_counts().reset_index()  # Count winners' education levels
     winner_education.columns = ['EDUCATION', 'COUNT']
 
+    # Print the winner_education DataFrame to inspect its structure
+    print("Winner Education DataFrame:")
+    print(winner_education)
+
     # Plot the bar chart for winning candidates' educational degrees
     fig_winner_education = px.bar(winner_education, 
                                   x='EDUCATION', 
