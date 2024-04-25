@@ -106,13 +106,8 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order and select top 10
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
-    # Plot the bar chart
-    fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', 
-                                 hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], 
-                                 title='Top 10 Individuals with the Highest Assets', 
-                                 template='plotly_dark')
-
-    # Display the bar chart
+    # Plot the scatter plot
+    fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
    
 
