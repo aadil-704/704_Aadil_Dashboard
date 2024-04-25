@@ -36,26 +36,22 @@ if tab_selector == "Graph":
     st.plotly_chart(fig_seats_won)
 
     # Count the number of seats contested by each party
-    party_contest = df['PARTY'].value_counts().reset_index().head(10)
-    party_contest.columns = ['PARTY', 'CONTEST_COUNT']
-
-    # Filter the DataFrame to include only winners
-    df_winners = df[df['WINNER'] == 1]
+    contest_counts = df['PARTY'].value_counts()
 
     # Count the number of seats won by each party
-    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
-    winner.columns = ['PARTY', 'WIN_COUNT']
+    win_counts = df[df['WINNER'] == 1]['PARTY'].value_counts()
 
-    # Merge the two DataFrames on 'PARTY'
-    merged_df = pd.merge(party_contest, winner, on='PARTY', how='outer').fillna(0)
+    # Find the party with maximum contested seats
+    max_contest_party = contest_counts.idxmax()
+    max_contest_count = contest_counts.max()
 
-    # Plot the combined histogram chart
-    fig_combined = px.bar(merged_df, x='PARTY', y=['CONTEST_COUNT', 'WIN_COUNT'], barmode='group',
-                          labels={'value': 'Count', 'variable': 'Type'}, title='Seats Contested vs Won by Party',
-                          template='plotly_dark')
+    # Find the party with maximum winning seats
+    max_win_party = win_counts.idxmax()
+    max_win_count = win_counts.max()
 
-    # Display the combined histogram chart
-    st.plotly_chart(fig_combined)
+    # Display the results
+    st.write(f"The party with the maximum contested seats is: {max_contest_party}, with {max_contest_count} seats contested.")
+    st.write(f"The party with the maximum winning seats is: {max_win_party}, with {max_win_count} seats won.")
     
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
