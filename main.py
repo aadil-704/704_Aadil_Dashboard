@@ -35,27 +35,18 @@ if tab_selector == "Graph":
 
     st.plotly_chart(fig_seats_won)
 
-    # Filter out specific parties
-    filtered_df = df[~df['PARTY'].isin(["NOTA", "IND", "NTK", "VBA (M)"])]
+    party = df['PARTY'].value_counts().reset_index().head(10)
+    party.columns = ['PARTY', 'COUNT']
+    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
 
-    # Count the number of seats contested by each party
-    contest_counts = filtered_df['PARTY'].value_counts().head(10).reset_index()
-    contest_counts.columns = ['PARTY', 'Contest_Count']
+    st.plotly_chart(fig_party)
 
-    # Count the number of seats won by each party
-    win_counts = filtered_df[filtered_df['WINNER'] == 1]['PARTY'].value_counts().head(10).reset_index()
-    win_counts.columns = ['PARTY', 'Win_Count']
+    df_winners = df[df['WINNER'] == 1]
+    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
+    winner.columns = ['PARTY', 'COUNT']
+    fig_winner = px.bar(winner, x='PARTY', y='COUNT', color='PARTY', title='The number of seats winning by party', template='plotly_dark')
 
-    # Merge contest and win counts
-    merged_counts = contest_counts.merge(win_counts, on='PARTY', how='outer').fillna(0)
-
-    # Create a histogram
-    fig = px.bar(merged_counts, x='PARTY', y=['Contest_Count', 'Win_Count'], barmode='group',
-             labels={'value': 'Count', 'variable': 'Type'}, title='Top 10 Parties: Seats Contested vs. Won',
-             template='plotly_dark')
-
-    # Display the histogram
-    st.plotly_chart(fig)
+    st.plotly_chart(fig_winner)
 
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
