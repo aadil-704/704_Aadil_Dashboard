@@ -88,6 +88,9 @@ if tab_selector == "Graph":
     individual_criminal_cases = df.groupby('NAME')['Criminal'].sum().reset_index()
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
+    # Print individual_criminal_cases for debugging
+    print(individual_criminal_cases)
+
     fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', hover_data=['NAME', 'Criminal', 'PARTY', 'CONSTITUENCY'], title='Top 10 Individuals with the Most Criminal Cases', template='plotly_dark')
     st.plotly_chart(fig_individual_criminal_cases)
 
