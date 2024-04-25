@@ -61,7 +61,7 @@ elif tab_selector == "Graph":
 
     party = df['PARTY'].value_counts().reset_index().head(10)
     party.columns = ['PARTY', 'COUNT']
-    fig_party = px.pie(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
+    fig_party = px.bar(party, x='PARTY', y='COUNT', color='PARTY', title='The number of seats contest by a party', template='plotly_dark')
 
     st.plotly_chart(fig_party)
 
