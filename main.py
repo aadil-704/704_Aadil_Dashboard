@@ -83,7 +83,7 @@ if tab_selector == "Graph":
                                   color='EDUCATION',  # Change to color='PARTY' for coloring by party
                                   title='Winning Candidates Educational Degree', 
                                   template='plotly_dark',
-                                  hover_data={'EDUCATION': False, 'COUNT','PARTY', 'STATE', 'CONSTITUENCY': True})  # Add hover data for count only
+                                  hover_data={'EDUCATION': False, 'COUNT': True, 'PARTY': True, 'STATE': True, 'CONSTITUENCY': True})  # Add hover data for count only
 
     st.plotly_chart(fig_winner_education)
 
