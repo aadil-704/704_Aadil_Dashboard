@@ -56,7 +56,7 @@ if tab_selector == "Graph":
 
     # Display the combined histogram chart
     st.plotly_chart(fig_combined)
-
+    
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
 
