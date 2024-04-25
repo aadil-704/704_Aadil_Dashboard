@@ -23,7 +23,8 @@ if tab_selector == "Graph":
     prty_cnt = vote_prty.groupby('PARTY')['CONSTITUENCY'].count().reset_index(name='# Constituency')
     prty_st = vote_prty.groupby('PARTY')['STATE'].nunique().reset_index(name='# State')
     prty_top_all = prty_cnt.merge(prty_st, on='PARTY').nlargest(25, '# Constituency')
-    fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'], title='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
+    fig = px.scatter(prty_top_all, x='# Constituency', y='# State', color='# State', size='# Constituency', hover_data=['PARTY'])
+    fig.update_layout(title_text='Constituency vs Statewise participation for the most contesting Political Parties', template='plotly_dark')
 
     # Streamlit UI
     st.plotly_chart(fig)
@@ -55,6 +56,8 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
+   
+    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
@@ -85,7 +88,7 @@ if tab_selector == "Graph":
     individual_criminal_cases = df.groupby('NAME')['Criminal'].sum().reset_index()
     individual_criminal_cases = individual_criminal_cases.sort_values(by='Criminal', ascending=False).head(10)
 
-    fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', hover_data=['NAME', 'Criminal'], title='Top 10 Individuals with the Most Criminal Cases', template='plotly_dark')
+    fig_individual_criminal_cases = px.bar(individual_criminal_cases, x='NAME', y='Criminal', color='NAME', title='Top 10 Individuals with the Most Criminal Cases', template='plotly_dark')
     st.plotly_chart(fig_individual_criminal_cases)
 
     # Clean up 'ASSETS' column and convert to integer
