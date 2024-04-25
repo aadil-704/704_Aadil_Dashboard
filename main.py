@@ -39,24 +39,23 @@ if tab_selector == "Graph":
     party_contest = df['PARTY'].value_counts().reset_index().head(10)
     party_contest.columns = ['PARTY', 'CONTEST_COUNT']
 
-   # Filter the DataFrame to include only winners
-   df_winners = df[df['WINNER'] == 1]
+    # Filter the DataFrame to include only winners
+    df_winners = df[df['WINNER'] == 1]
 
-   # Count the number of seats won by each party
-   winner = df_winners['PARTY'].value_counts().reset_index().head(10)
-   winner.columns = ['PARTY', 'WIN_COUNT']
+    # Count the number of seats won by each party
+    winner = df_winners['PARTY'].value_counts().reset_index().head(10)
+    winner.columns = ['PARTY', 'WIN_COUNT']
 
-   # Merge the two DataFrames on 'PARTY'
-   merged_df = party_contest.merge(winner, on='PARTY', how='outer').fillna(0)
+    # Merge the two DataFrames on 'PARTY'
+    merged_df = party_contest.merge(winner, on='PARTY', how='outer').fillna(0)
 
-   # Plot the combined bar chart
-   fig_combined = px.bar(merged_df, x='PARTY', y=['CONTEST_COUNT', 'WIN_COUNT'], barmode='group',
-                      labels={'value': 'Count', 'variable': 'Type'}, title='Seats Contested vs Won by Party',
-                      template='plotly_dark')
+    # Plot the combined bar chart
+    fig_combined = px.bar(merged_df, x='PARTY', y=['CONTEST_COUNT', 'WIN_COUNT'], barmode='group',
+                          labels={'value': 'Count', 'variable': 'Type'}, title='Seats Contested vs Won by Party',
+                          template='plotly_dark')
 
-   # Display the combined bar chart
-   st.plotly_chart(fig_combined)
-
+    # Display the combined bar chart
+    st.plotly_chart(fig_combined)
 
     # Assuming 'vote' DataFrame is already defined
     vote_gndr = vote[vote['PARTY'] != 'NOTA']
@@ -66,8 +65,6 @@ if tab_selector == "Graph":
         vote_gndr[vote_gndr['WINNER'] == 1].groupby('GENDER')['NAME'].count().rename('Counts').reset_index()
     ], keys=['Overall Gender Ratio', 'Winning Gender Ratio']).reset_index(level=1)
 
-   
-    
     fig = px.bar(gndr_counts, x='GENDER', y='Counts', color=gndr_counts.index, barmode='group')
     fig.update_layout(title_text='Participation vs Win Counts analysis for the Genders', template='plotly_dark')
     st.plotly_chart(fig)
@@ -119,7 +116,6 @@ if tab_selector == "Graph":
     # Plot the scatter plot
     fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
-   
 
     # Filter and count overall category
     cat_overall = vote[vote['PARTY'] != 'NOTA']['CATEGORY'].value_counts().reset_index()
@@ -150,9 +146,9 @@ if tab_selector == "Graph":
 
     # Update the layout
     fig.update_layout(xaxis_title="Age",
-                  yaxis_title="Count",
-                  title_text='Age Distribution of Winning Politicians by Gender',
-                  template='plotly_dark')
+                      yaxis_title="Count",
+                      title_text='Age Distribution of Winning Politicians by Gender',
+                      template='plotly_dark')
 
     # Show the figure
     st.plotly_chart(fig)
