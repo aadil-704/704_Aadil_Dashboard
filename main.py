@@ -3,7 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 # Streamlit UI
-st.header("General Elections In India 2019")
+st.sidebar.header("General Elections In India 2019")
 tab_selector = st.sidebar.radio("Select Tab", ("Graph", "Analysis"))
 
 if tab_selector == "Graph":
@@ -106,8 +106,8 @@ if tab_selector == "Graph":
     # Sort by count of assets in descending order and select top 10
     individual_assets = individual_assets.sort_values(by='ASSETS', ascending=False).head(10)
 
-    # Plot the bar chart
-    fig_individual_assets = px.bar(individual_assets, x='NAME', y='ASSETS', color='PARTY', title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
+    # Plot the scatter plot
+    fig_individual_assets = px.scatter(individual_assets, x='NAME', y='ASSETS', color='PARTY', hover_data=['PARTY', 'STATE', 'CONSTITUENCY'], title='Top 10 Individuals with the Highest Assets', template='plotly_dark')
     st.plotly_chart(fig_individual_assets)
    
 
